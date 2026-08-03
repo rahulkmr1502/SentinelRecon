@@ -57,3 +57,13 @@ Target 'google.com' is valid.
 
 ---
 **Project Status:** Milestone 1 Complete 🚀
+
+## Milestone 2
+
+### Features Completed
+
+- DNS resolution
+- IPv4 support
+- IPv6 support
+- Logging of resolved addresses
+- Graceful DNS error handling
