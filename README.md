@@ -1,4 +1,4 @@
-# Network Recon & Vulnerability Assessment Tool
+# SentinelRecon
 
 A Python-based cybersecurity tool for network reconnaissance and vulnerability assessment.
 
