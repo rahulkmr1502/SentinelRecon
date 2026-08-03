@@ -28,6 +28,8 @@ def main() -> None:
     for address in addresses:
         print(f" - {address}")
 
+    print(f"\nTotal addresses found: {len(addresses)}")
+
 
 if __name__ == "__main__":
     main()
