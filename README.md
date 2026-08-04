@@ -14,10 +14,12 @@ A Python-based cybersecurity tool for network reconnaissance and vulnerability a
 ## Project Structure
 
 ```
-network-recon-tool/
+SentinelRecon/
 │
 ├── src/
 │   ├── __init__.py
+│   ├── dns_resolver.py
+│   ├── port_scanner.py
 │   ├── main.py
 │   ├── validator.py
 │   └── logger.py
@@ -54,6 +56,9 @@ Target 'google.com' is valid.
 - pathlib
 - ipaddress
 - Regular Expressions (re)
+- socket
+- DNS Resolution 
+- TCP networking
 
 ---
 **Project Status:** Milestone 1 Complete 🚀
@@ -67,3 +72,13 @@ Target 'google.com' is valid.
 - IPv6 support
 - Logging of resolved addresses
 - Graceful DNS error handling
+
+## Milestone 3
+
+### Features Completed
+
+- TCP port scanning
+- Configurable port range
+- Open port detection
+- Scan logging
+
