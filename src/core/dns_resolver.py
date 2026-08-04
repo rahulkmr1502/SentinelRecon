@@ -1,6 +1,6 @@
 import socket
 
-from logger import logger
+from core.logger import logger
 
 
 def resolve_target(target: str) -> list[str]:

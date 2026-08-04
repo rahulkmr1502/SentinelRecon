@@ -1,9 +1,9 @@
-from banner_grabber import grab_banner
-from dns_resolver import resolve_target
-from logger import logger
-from port_scanner import scan_ports
-from validator import validate_target
-
+from core.banner_grabber import grab_banner
+from core.config import ScannerConfig
+from core.dns_resolver import resolve_target
+from core.logger import logger
+from core.port_scanner import scan_ports
+from core.validator import validate_target
 
 def main() -> None:
     target = input("Enter an IP address or domain: ").strip()
@@ -41,8 +41,9 @@ def main() -> None:
 
     print(f"\nScanning TCP ports on {target_ip}...")
     print("Please wait...\n")
+    config = ScannerConfig()
 
-    open_ports = scan_ports(target_ip, 20, 100)
+    open_ports = scan_ports(target_ip, config)
 
     if not open_ports:
         print("No open TCP ports found.")

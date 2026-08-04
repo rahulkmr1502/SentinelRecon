@@ -1,7 +1,7 @@
 import re
 import socket
 
-from logger import logger
+from core.logger import logger
 
 
 def parse_banner(port: int, banner: str) -> dict:
@@ -17,7 +17,6 @@ def parse_banner(port: int, banner: str) -> dict:
         "banner": banner,
     }
 
-    # SSH Banner
     if banner.startswith("SSH-"):
         result["service"] = "SSH"
 
@@ -27,8 +26,7 @@ def parse_banner(port: int, banner: str) -> dict:
             result["product"] = "OpenSSH"
             result["version"] = match.group(1)
 
-    # HTTP Banner
-    elif "HTTP/" in banner:
+    elif banner.startswith("HTTP/"):
         result["service"] = "HTTP"
 
         match = re.search(r"Server:\s*([^\r\n]+)", banner)
@@ -48,27 +46,43 @@ def parse_banner(port: int, banner: str) -> dict:
 
 def grab_banner(host: str, port: int) -> dict:
     """
-    Connect to an open port, grab its banner,
-    and return structured service information.
+    Grab a service banner and return structured information.
     """
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
-            client.settimeout(2)
+            client.settimeout(3)
             client.connect((host, port))
 
-            # HTTP servers require a request
             if port == 80:
                 request = (
                     f"GET / HTTP/1.1\r\n"
                     f"Host: {host}\r\n"
+                    "User-Agent: SentinelRecon\r\n"
                     "Connection: close\r\n\r\n"
                 )
+
                 client.sendall(request.encode())
 
-            response = client.recv(4096).decode(errors="ignore")
+            chunks = []
 
-            # Keep only HTTP headers
+            while True:
+                try:
+                    data = client.recv(4096)
+
+                    if not data:
+                        break
+
+                    chunks.append(data)
+
+                    if len(b"".join(chunks)) > 4096:
+                        break
+
+                except socket.timeout:
+                    break
+
+            response = b"".join(chunks).decode(errors="ignore")
+
             if port == 80:
                 banner = response.split("\r\n\r\n")[0]
             else:
@@ -77,9 +91,6 @@ def grab_banner(host: str, port: int) -> dict:
             logger.info("Banner on port %s:\n%s", port, banner)
 
             return parse_banner(port, banner)
-
-    except socket.timeout:
-        logger.warning("Connection timed out on port %s", port)
 
     except Exception as error:
         logger.warning("Banner grab failed on port %s: %s", port, error)

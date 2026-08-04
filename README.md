@@ -82,3 +82,41 @@ Target 'google.com' is valid.
 - Open port detection
 - Scan logging
 
+## Milestone 4 – Banner Grabbing & Service Fingerprinting
+
+### Features Implemented
+
+- Banner grabbing for open TCP services
+- HTTP header parsing
+- SSH banner detection
+- Service fingerprinting
+- Product detection
+- Version extraction
+- Structured scan results
+- Professional tabular output
+
+### Sample Output
+
+```text
+========================================================================
+PORT    SERVICE        PRODUCT             VERSION
+========================================================================
+22      SSH            OpenSSH             6.6.1p1
+80      HTTP           Apache              2.4.7 (Ubuntu)
+========================================================================
+```
+
+## Milestone 5 – Concurrent TCP Port Scanning
+
+### Features Implemented
+
+- Concurrent TCP port scanning using `ThreadPoolExecutor`
+- Configurable scanner settings using `ScannerConfig`
+- Multi-threaded port scanning for improved performance
+- Configurable scan timeout
+- Configurable worker threads
+- Modular scanner architecture
+- Automatic sorting of discovered open ports
+- Enhanced logging for concurrent scans
+- Type hints for improved code quality
+- Improved code organization with `core` package
