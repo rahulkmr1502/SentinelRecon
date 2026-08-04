@@ -1,3 +1,4 @@
+from banner_grabber import grab_banner
 from dns_resolver import resolve_target
 from logger import logger
 from port_scanner import scan_ports
@@ -35,24 +36,34 @@ def main() -> None:
     )
 
     if target_ip is None:
-        print("\nNo IPv4 address found for scanning.")
+        print("No IPv4 address found for scanning.")
         return
 
     print(f"\nScanning TCP ports on {target_ip}...")
     print("Please wait...\n")
 
-    # Scan only ports 20-100 for now (faster while learning)
     open_ports = scan_ports(target_ip, 20, 100)
 
-    if open_ports:
-        print("Open TCP Ports:")
-        for port in open_ports:
-            print(f" - {port}")
+    if not open_ports:
+        print("No open TCP ports found.")
+        return
 
-        print(f"\nTotal Open Ports Found: {len(open_ports)}")
+    print("=" * 72)
+    print(f"{'PORT':<8}{'SERVICE':<15}{'PRODUCT':<20}{'VERSION'}")
+    print("=" * 72)
 
-    else:
-        print("No open TCP ports found in the scanned range.")
+    for port in open_ports:
+        result = grab_banner(target_ip, port)
+
+        print(
+            f"{result['port']:<8}"
+            f"{result['service']:<15}"
+            f"{result['product']:<20}"
+            f"{result['version']}"
+        )
+
+    print("=" * 72)
+    print(f"Total Open Ports Found: {len(open_ports)}")
 
 
 if __name__ == "__main__":
