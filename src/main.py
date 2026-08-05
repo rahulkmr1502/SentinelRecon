@@ -1,5 +1,6 @@
 from core.banner_grabber import grab_banner
 from core.config import ScannerConfig
+from core.cve_matcher import lookup_service_cves
 from core.dns_resolver import resolve_target
 from core.http_analyzer import analyze_http
 from core.logger import logger
@@ -33,7 +34,6 @@ def main() -> None:
     for address in addresses:
         print(f" - {address}")
 
-    # Select the first IPv4 address
     target_ip = next(
         (address for address in addresses if "." in address),
         None,
@@ -126,6 +126,46 @@ def main() -> None:
         print(f"Valid Until        : {tls_result['valid_until']}")
         print(f"Certificate Status : {tls_result['certificate_status']}")
         print(f"Days Remaining     : {tls_result['days_remaining']}")
+
+    # ==========================================================
+    # CVE Lookup
+    # ==========================================================
+
+    print("\nKnown Vulnerabilities")
+    print("=" * 70)
+
+    found_any = False
+
+    for service in service_results:
+
+        product = service["product"]
+        version = service["version"]
+
+        if product == "Unknown":
+            continue
+
+        print(f"\n{product} {version}")
+        print("-" * 70)
+
+        cves = lookup_service_cves(product, version)
+
+        if not cves:
+            print("No known CVEs found.")
+            continue
+
+        found_any = True
+
+        for cve in cves[:5]:
+
+            print(f"CVE ID      : {cve.cve_id}")
+            print(f"Severity    : {cve.severity}")
+            print(f"CVSS Score  : {cve.cvss_score}")
+            print(f"Published   : {cve.published}")
+            print(f"Description : {cve.description[:120]}...")
+            print("-" * 70)
+
+    if not found_any:
+        print("No known vulnerabilities found.")
 
 
 if __name__ == "__main__":

@@ -24,36 +24,46 @@ The project focuses on understanding how reconnaissance tools work internally in
 - Structured security findings
 - Logging
 - Modular architecture
+- CVE lookup using NVD API
+- Vulnerability intelligence
 
 ---
 
 ## Project Structure
 
-```text
+```
 SentinelRecon/
 │
 ├── src/
 │   ├── main.py
 │   │
 │   ├── core/
-│   │   ├── __init__.py
-│   │   ├── banner_grabber.py
-│   │   ├── config.py
-│   │   ├── dns_resolver.py
-│   │   ├── findings.py
-│   │   ├── http_analyzer.py
-│   │   ├── logger.py
-│   │   ├── misconfig_detector.py
-│   │   ├── port_scanner.py
-│   │   ├── service_fingerprint.py
-│   │   ├── severity.py
-│   │   ├── tls_analyzer.py
-│   │   └── validator.py
+│   │  │── __init__.py
+│   |  |── banner_grabber.py
+│   |  |── config.py
+│   |  |── cve.py
+│   |  |── cve_matcher.py
+│   |  |── cve_parser.py
+│   |  |── dns_resolver.py
+│   |  |── findings.py
+│   |  |── http_analyzer.py
+│   |  |── logger.py
+│   |  |── misconfig_detector.py
+│   |  |── nvd_client.py
+│   |  |── port_scanner.py
+│   |  |── service_fingerprint.py
+│   |  |── severity.py
+│   |  |── tls_analyzer.py
+|   |  └── validator.py
 │   │
 │   ├── test_finding.py
 │   ├── test_http.py
 │   ├── test_misconfig.py
 │   ├── test_severity.py
+|   |──test_cve.py
+|   |──test_cve_parser.py
+|   |──test_matcher.py
+|   |──test_nvd.py
 │   └── test_tls.py
 │
 ├── logs/
@@ -159,7 +169,7 @@ PORT    SERVICE        PRODUCT             VERSION
 
 ### Sample Output
 
-```text
+```
 ========================================================================
 PORT    SERVICE        PRODUCT             VERSION
 ========================================================================
@@ -218,7 +228,7 @@ Days Remaining     : 46
 
 ### Sample Output
 
-```text
+```
 Security Findings
 ======================================================================
 Title          : Missing Content-Security-Policy Header
@@ -237,6 +247,34 @@ Recommendation : Configure the Referrer-Policy header.
 
 ---
 
+# Milestone 8
+
+## Features Completed
+
+- NVD API integration
+- CVE data model
+- CVE JSON parser
+- CVE lookup by detected software
+- Vulnerability intelligence
+- Integration with SentinelRecon
+
+### Sample Output
+
+```
+Known Vulnerabilities
+======================================================================
+
+Apache 2.4.7
+----------------------------------------------------------------------
+CVE ID      : CVE-2024-38474
+Severity    : CRITICAL
+CVSS Score  : 9.8
+Published   : 2024-07-01
+Description : ...
+```
+
+---
+
 # Technologies Used
 
 - Python 3
@@ -246,6 +284,9 @@ Recommendation : Configure the Referrer-Policy header.
 - Logging
 - Regular Expressions
 - Dataclasses
+- Requests
+- REST APIs
+- JSON
 
 ---
 
@@ -266,13 +307,16 @@ Recommendation : Configure the Referrer-Policy header.
 - Vulnerability Assessment
 - Reconnaissance
 - Network Enumeration
+- Common Vulnerabilities and Exposures (CVE)
+- National Vulnerability Database (NVD)
+- Vulnerability Intelligence
+- Software Enumeration
 
 ---
 
 # Upcoming Features
 
-- CVE Lookup (NIST NVD API)
-- CVSS Scoring
+- CVSS Risk Prioritization
 - HTML Report Generation
 - JSON Report Export
 - Configuration File Support
@@ -314,8 +358,8 @@ This project is designed to understand:
 | Architecture Refactoring | ✅ |
 | HTTP & TLS Analysis | ✅ |
 | Security Misconfiguration Detection | ✅ |
-| CVE Lookup (NVD API) | ⏳ |
-| CVSS Scoring | ⏳ |
+| CVE Lookup (NVD API) | ✅ |
+| CVSS Risk Prioritization | ⏳ |
 | HTML Report Generation | ⏳ |
 | JSON Export | ⏳ |
 | Docker Support | ⏳ |
