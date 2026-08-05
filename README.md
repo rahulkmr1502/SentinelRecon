@@ -19,6 +19,9 @@ The project focuses on understanding how reconnaissance tools work internally in
 - Security header analysis
 - TLS certificate inspection
 - Certificate expiry analysis
+- Security misconfiguration detection
+- Severity classification
+- Structured security findings
 - Logging
 - Modular architecture
 
@@ -26,7 +29,7 @@ The project focuses on understanding how reconnaissance tools work internally in
 
 ## Project Structure
 
-```
+```text
 SentinelRecon/
 │
 ├── src/
@@ -37,14 +40,20 @@ SentinelRecon/
 │   │   ├── banner_grabber.py
 │   │   ├── config.py
 │   │   ├── dns_resolver.py
+│   │   ├── findings.py
 │   │   ├── http_analyzer.py
 │   │   ├── logger.py
+│   │   ├── misconfig_detector.py
 │   │   ├── port_scanner.py
 │   │   ├── service_fingerprint.py
+│   │   ├── severity.py
 │   │   ├── tls_analyzer.py
 │   │   └── validator.py
 │   │
+│   ├── test_finding.py
 │   ├── test_http.py
+│   ├── test_misconfig.py
+│   ├── test_severity.py
 │   └── test_tls.py
 │
 ├── logs/
@@ -186,6 +195,48 @@ Days Remaining     : 46
 
 ---
 
+# Milestone 7
+
+## Features Completed
+
+- Finding model using Python dataclasses
+- Severity classification using Enum
+- HTTP security misconfiguration detection
+- Detection of missing security headers
+- Structured security findings
+- Security recommendations
+- Integration into the main scanner
+
+### Security Checks
+
+- Strict-Transport-Security
+- Content-Security-Policy
+- X-Frame-Options
+- X-Content-Type-Options
+- Referrer-Policy
+- Permissions-Policy
+
+### Sample Output
+
+```text
+Security Findings
+======================================================================
+Title          : Missing Content-Security-Policy Header
+Severity       : Medium
+Category       : Security Misconfiguration
+Description    : The application does not define a Content Security Policy.
+Recommendation : Configure the Content-Security-Policy header.
+----------------------------------------------------------------------
+Title          : Missing Referrer-Policy Header
+Severity       : Low
+Category       : Security Misconfiguration
+Description    : Sensitive URL information may leak through the Referer header.
+Recommendation : Configure the Referrer-Policy header.
+----------------------------------------------------------------------
+```
+
+---
+
 # Technologies Used
 
 - Python 3
@@ -203,6 +254,7 @@ Days Remaining     : 46
 - DNS Resolution
 - TCP/IP
 - TCP Port Scanning
+- Concurrent Network Scanning
 - Banner Grabbing
 - Service Fingerprinting
 - HTTP Protocol
@@ -210,6 +262,8 @@ Days Remaining     : 46
 - TLS Handshake
 - X.509 Certificates
 - Security Headers
+- Security Misconfiguration Detection
+- Vulnerability Assessment
 - Reconnaissance
 - Network Enumeration
 
@@ -217,8 +271,6 @@ Days Remaining     : 46
 
 # Upcoming Features
 
-- Security Misconfiguration Detection
-- Severity Levels
 - CVE Lookup (NIST NVD API)
 - CVSS Scoring
 - HTML Report Generation
@@ -229,6 +281,7 @@ Days Remaining     : 46
 - Docker Support
 - GitHub Actions CI/CD
 - Final Refactoring
+- Final Documentation
 
 ---
 
@@ -238,11 +291,36 @@ This project is designed to understand:
 
 - Network reconnaissance
 - TCP socket programming
+- Concurrent network scanning
 - HTTP and HTTPS internals
 - Service fingerprinting
+- TLS certificate inspection
+- Security header analysis
+- Security misconfiguration detection
 - Vulnerability assessment workflow
 - Secure software engineering
 - Modular Python application design
+
+---
+
+# Project Progress
+
+| Milestone | Status |
+|-----------|--------|
+| Project Setup | ✅ |
+| DNS Resolution | ✅ |
+| Concurrent TCP Port Scanner | ✅ |
+| Banner Grabbing & Service Fingerprinting | ✅ |
+| Architecture Refactoring | ✅ |
+| HTTP & TLS Analysis | ✅ |
+| Security Misconfiguration Detection | ✅ |
+| CVE Lookup (NVD API) | ⏳ |
+| CVSS Scoring | ⏳ |
+| HTML Report Generation | ⏳ |
+| JSON Export | ⏳ |
+| Docker Support | ⏳ |
+| GitHub Actions CI | ⏳ |
+| Final Documentation | ⏳ |
 
 ---
 

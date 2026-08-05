@@ -3,6 +3,7 @@ from core.config import ScannerConfig
 from core.dns_resolver import resolve_target
 from core.http_analyzer import analyze_http
 from core.logger import logger
+from core.misconfig_detector import detect_http_misconfigurations
 from core.port_scanner import scan_ports
 from core.tls_analyzer import analyze_tls
 from core.validator import validate_target
@@ -32,6 +33,7 @@ def main() -> None:
     for address in addresses:
         print(f" - {address}")
 
+    # Select the first IPv4 address
     target_ip = next(
         (address for address in addresses if "." in address),
         None,
@@ -92,6 +94,22 @@ def main() -> None:
             status = "✓ Present" if present else "✗ Missing"
 
             print(f"{header:<35} {status}")
+
+        findings = detect_http_misconfigurations(http_result)
+
+        if findings:
+
+            print("\nSecurity Findings")
+            print("=" * 70)
+
+            for finding in findings:
+
+                print(f"Title          : {finding.title}")
+                print(f"Severity       : {finding.severity}")
+                print(f"Category       : {finding.category}")
+                print(f"Description    : {finding.description}")
+                print(f"Recommendation : {finding.recommendation}")
+                print("-" * 70)
 
     # HTTPS / TLS Analysis
     if 443 in open_ports:
