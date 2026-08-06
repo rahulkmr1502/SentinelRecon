@@ -6,6 +6,7 @@ from core.http_analyzer import analyze_http
 from core.logger import logger
 from core.misconfig_detector import detect_http_misconfigurations
 from core.port_scanner import scan_ports
+from core.risk_analyzer import analyze_risk
 from core.tls_analyzer import analyze_tls
 from core.validator import validate_target
 
@@ -61,7 +62,9 @@ def main() -> None:
     service_results = []
 
     for port in open_ports:
+
         result = grab_banner(target_ip, port)
+
         service_results.append(result)
 
         print(
@@ -74,7 +77,10 @@ def main() -> None:
     print("=" * 72)
     print(f"Total Open Ports Found: {len(open_ports)}")
 
+    # ==========================================================
     # HTTP Analysis
+    # ==========================================================
+
     if 80 in open_ports:
 
         http_result = analyze_http(target_ip)
@@ -111,7 +117,10 @@ def main() -> None:
                 print(f"Recommendation : {finding.recommendation}")
                 print("-" * 70)
 
-    # HTTPS / TLS Analysis
+    # ==========================================================
+    # TLS Analysis
+    # ==========================================================
+
     if 443 in open_ports:
 
         tls_result = analyze_tls(target)
@@ -135,6 +144,7 @@ def main() -> None:
     print("=" * 70)
 
     found_any = False
+    all_cves = []
 
     for service in service_results:
 
@@ -148,6 +158,8 @@ def main() -> None:
         print("-" * 70)
 
         cves = lookup_service_cves(product, version)
+
+        all_cves.extend(cves)
 
         if not cves:
             print("No known CVEs found.")
@@ -166,6 +178,24 @@ def main() -> None:
 
     if not found_any:
         print("No known vulnerabilities found.")
+
+    # ==========================================================
+    # Risk Summary
+    # ==========================================================
+
+    print("\nRisk Summary")
+    print("=" * 70)
+
+    summary = analyze_risk(all_cves)
+
+    print(f"Critical       : {summary.critical}")
+    print(f"High           : {summary.high}")
+    print(f"Medium         : {summary.medium}")
+    print(f"Low            : {summary.low}")
+    print(f"Informational  : {summary.informational}")
+    print(f"Total CVEs     : {summary.total}")
+    print(f"Average CVSS   : {summary.average_cvss}")
+    print(f"Overall Risk   : {summary.overall_risk}")
 
 
 if __name__ == "__main__":

@@ -26,6 +26,9 @@ The project focuses on understanding how reconnaissance tools work internally in
 - Modular architecture
 - CVE lookup using NVD API
 - Vulnerability intelligence
+- CVSS risk analysis
+- Overall risk assessment
+- Vulnerability severity statistics
 
 ---
 
@@ -275,6 +278,32 @@ Description : ...
 
 ---
 
+# Milestone 9
+
+## Features Completed
+
+- Risk Summary dataclass
+- CVSS score analysis
+- Severity counting
+- Overall risk calculation
+- Professional vulnerability summary
+- Integrated risk assessment
+
+### Sample Output
+
+```text
+Risk Summary
+======================================================================
+Critical       : 0
+High           : 0
+Medium         : 3
+Low            : 0
+Informational  : 0
+Total CVEs     : 3
+Average CVSS   : 5.17
+Overall Risk   : Medium
+```
+
 # Technologies Used
 
 - Python 3
@@ -287,6 +316,8 @@ Description : ...
 - Requests
 - REST APIs
 - JSON
+- Dataclasses
+- CVSS
 
 ---
 
@@ -311,12 +342,14 @@ Description : ...
 - National Vulnerability Database (NVD)
 - Vulnerability Intelligence
 - Software Enumeration
+- CVSS (Common Vulnerability Scoring System)
+- Risk Prioritization
+- Vulnerability Assessment
 
 ---
 
 # Upcoming Features
 
-- CVSS Risk Prioritization
 - HTML Report Generation
 - JSON Report Export
 - Configuration File Support
@@ -347,21 +380,25 @@ This project is designed to understand:
 
 ---
 
-# Project Progress
-
 | Milestone | Status |
 |-----------|--------|
 | Project Setup | ✅ |
+| Logging | ✅ |
+| Target Validation | ✅ |
 | DNS Resolution | ✅ |
-| Concurrent TCP Port Scanner | ✅ |
-| Banner Grabbing & Service Fingerprinting | ✅ |
-| Architecture Refactoring | ✅ |
-| HTTP & TLS Analysis | ✅ |
-| Security Misconfiguration Detection | ✅ |
-| CVE Lookup (NVD API) | ✅ |
-| CVSS Risk Prioritization | ⏳ |
+| TCP Port Scanner | ✅ |
+| Banner Grabbing | ✅ |
+| Service Fingerprinting | ✅ |
+| HTTP Analysis | ✅ |
+| TLS Inspection | ✅ |
+| Misconfiguration Detection | ✅ |
+| CVE Lookup | ✅ |
+| CVSS Risk Analysis | ✅ |
 | HTML Report Generation | ⏳ |
 | JSON Export | ⏳ |
+| Configuration Support | ⏳ |
+| Unit Tests | ⏳ |
+| Integration Tests | ⏳ |
 | Docker Support | ⏳ |
 | GitHub Actions CI | ⏳ |
 | Final Documentation | ⏳ |
