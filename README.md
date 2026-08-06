@@ -20,15 +20,12 @@ The project focuses on understanding how reconnaissance tools work internally in
 - TLS certificate inspection
 - Certificate expiry analysis
 - Security misconfiguration detection
-- Severity classification
-- Structured security findings
+- CVE lookup using NIST NVD API
+- CVSS score analysis
+- Risk assessment
+- Professional HTML report generation
 - Logging
 - Modular architecture
-- CVE lookup using NVD API
-- Vulnerability intelligence
-- CVSS risk analysis
-- Overall risk assessment
-- Vulnerability severity statistics
 
 ---
 
@@ -304,6 +301,31 @@ Average CVSS   : 5.17
 Overall Risk   : Medium
 ```
 
+# Milestone 10
+
+## Features Completed
+
+- Professional HTML Report Generation
+- Automatic Report Creation
+- Executive Summary
+- Open Ports Table
+- Security Findings Table
+- Known Vulnerabilities Table
+- Risk Summary Section
+- Timestamped Report Filenames
+- Reports Directory Management
+- Modular Report Generator
+
+### Sample Output
+
+```text
+HTML Report
+======================================================================
+Report saved to:
+
+reports/google.com_20260806_093415.html
+```
+
 # Technologies Used
 
 - Python 3
@@ -394,7 +416,7 @@ This project is designed to understand:
 | Misconfiguration Detection | ✅ |
 | CVE Lookup | ✅ |
 | CVSS Risk Analysis | ✅ |
-| HTML Report Generation | ⏳ |
+| HTML Report Generation | ✅ |
 | JSON Export | ⏳ |
 | Configuration Support | ⏳ |
 | Unit Tests | ⏳ |

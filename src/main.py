@@ -6,6 +6,7 @@ from core.http_analyzer import analyze_http
 from core.logger import logger
 from core.misconfig_detector import detect_http_misconfigurations
 from core.port_scanner import scan_ports
+from core.report_generator import generate_html_report
 from core.risk_analyzer import analyze_risk
 from core.tls_analyzer import analyze_tls
 from core.validator import validate_target
@@ -48,7 +49,6 @@ def main() -> None:
     print("Please wait...\n")
 
     config = ScannerConfig()
-
     open_ports = scan_ports(target_ip, config)
 
     if not open_ports:
@@ -76,6 +76,8 @@ def main() -> None:
 
     print("=" * 72)
     print(f"Total Open Ports Found: {len(open_ports)}")
+
+    findings = []
 
     # ==========================================================
     # HTTP Analysis
@@ -196,6 +198,22 @@ def main() -> None:
     print(f"Total CVEs     : {summary.total}")
     print(f"Average CVSS   : {summary.average_cvss}")
     print(f"Overall Risk   : {summary.overall_risk}")
+
+    # ==========================================================
+    # HTML Report
+    # ==========================================================
+
+    report = generate_html_report(
+        target=target,
+        services=service_results,
+        findings=findings,
+        cves=all_cves,
+        summary=summary,
+    )
+
+    print("\nHTML Report")
+    print("=" * 70)
+    print(f"Report Created:\n{report}")
 
 
 if __name__ == "__main__":
