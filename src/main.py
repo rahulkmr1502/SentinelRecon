@@ -3,6 +3,7 @@ from core.config import ScannerConfig
 from core.cve_matcher import lookup_service_cves
 from core.dns_resolver import resolve_target
 from core.http_analyzer import analyze_http
+from core.json_report_generator import generate_json_report
 from core.logger import logger
 from core.misconfig_detector import detect_http_misconfigurations
 from core.port_scanner import scan_ports
@@ -13,6 +14,11 @@ from core.validator import validate_target
 
 
 def main() -> None:
+
+    # ==========================================================
+    # Target Input
+    # ==========================================================
+
     target = input("Enter an IP address or domain: ").strip()
 
     if not target:
@@ -24,6 +30,10 @@ def main() -> None:
         print("Invalid IP address or domain.")
         return
 
+    # ==========================================================
+    # DNS Resolution
+    # ==========================================================
+
     print(f"\nResolving '{target}'...")
 
     addresses = resolve_target(target)
@@ -33,6 +43,7 @@ def main() -> None:
         return
 
     print("\nResolved Addresses:")
+
     for address in addresses:
         print(f" - {address}")
 
@@ -45,10 +56,15 @@ def main() -> None:
         print("No IPv4 address found.")
         return
 
+    # ==========================================================
+    # Port Scanning
+    # ==========================================================
+
     print(f"\nScanning TCP ports on {target_ip}...")
     print("Please wait...\n")
 
     config = ScannerConfig()
+
     open_ports = scan_ports(target_ip, config)
 
     if not open_ports:
@@ -60,6 +76,12 @@ def main() -> None:
     print("=" * 72)
 
     service_results = []
+    all_findings = []
+    all_cves = []
+
+    # ==========================================================
+    # Banner Grabbing & Service Fingerprinting
+    # ==========================================================
 
     for port in open_ports:
 
@@ -76,8 +98,6 @@ def main() -> None:
 
     print("=" * 72)
     print(f"Total Open Ports Found: {len(open_ports)}")
-
-    findings = []
 
     # ==========================================================
     # HTTP Analysis
@@ -105,6 +125,8 @@ def main() -> None:
 
         findings = detect_http_misconfigurations(http_result)
 
+        all_findings.extend(findings)
+
         if findings:
 
             print("\nSecurity Findings")
@@ -120,7 +142,7 @@ def main() -> None:
                 print("-" * 70)
 
     # ==========================================================
-    # TLS Analysis
+    # HTTPS / TLS Analysis
     # ==========================================================
 
     if 443 in open_ports:
@@ -146,7 +168,6 @@ def main() -> None:
     print("=" * 70)
 
     found_any = False
-    all_cves = []
 
     for service in service_results:
 
@@ -164,6 +185,7 @@ def main() -> None:
         all_cves.extend(cves)
 
         if not cves:
+
             print("No known CVEs found.")
             continue
 
@@ -182,38 +204,52 @@ def main() -> None:
         print("No known vulnerabilities found.")
 
     # ==========================================================
-    # Risk Summary
+    # Risk Analysis
     # ==========================================================
+
+    risk_summary = analyze_risk(all_cves)
 
     print("\nRisk Summary")
     print("=" * 70)
 
-    summary = analyze_risk(all_cves)
-
-    print(f"Critical       : {summary.critical}")
-    print(f"High           : {summary.high}")
-    print(f"Medium         : {summary.medium}")
-    print(f"Low            : {summary.low}")
-    print(f"Informational  : {summary.informational}")
-    print(f"Total CVEs     : {summary.total}")
-    print(f"Average CVSS   : {summary.average_cvss}")
-    print(f"Overall Risk   : {summary.overall_risk}")
+    print(f"Critical       : {risk_summary.critical}")
+    print(f"High           : {risk_summary.high}")
+    print(f"Medium         : {risk_summary.medium}")
+    print(f"Low            : {risk_summary.low}")
+    print(f"Informational  : {risk_summary.informational}")
+    print(f"Total CVEs     : {risk_summary.total}")
+    print(f"Average CVSS   : {risk_summary.average_cvss}")
+    print(f"Overall Risk   : {risk_summary.overall_risk}")
 
     # ==========================================================
     # HTML Report
     # ==========================================================
 
-    report = generate_html_report(
+    html_report = generate_html_report(
         target=target,
         services=service_results,
-        findings=findings,
+        findings=all_findings,
         cves=all_cves,
-        summary=summary,
+        summary=risk_summary,
     )
 
-    print("\nHTML Report")
-    print("=" * 70)
-    print(f"Report Created:\n{report}")
+    print("\nHTML Report Created:")
+    print(html_report)
+
+    # ==========================================================
+    # JSON Report
+    # ==========================================================
+
+    json_report = generate_json_report(
+        target=target,
+        services=service_results,
+        findings=all_findings,
+        cves=all_cves,
+        summary=risk_summary,
+    )
+
+    print("\nJSON Report Created:")
+    print(json_report)
 
 
 if __name__ == "__main__":

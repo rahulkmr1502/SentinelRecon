@@ -1,0 +1,34 @@
+{
+    "target": "google.com",
+    "generated_at": "2026-08-07T20:18:05.497838",
+    "services": [
+        {
+            "port": 22,
+            "service": "SSH",
+            "product": "OpenSSH",
+            "version": "6.6.1p1"
+        },
+        {
+            "port": 80,
+            "service": "HTTP",
+            "product": "Apache",
+            "version": "2.4.7"
+        }
+    ],
+    "security_findings": [
+        {
+            "title": "Missing CSP",
+            "severity": "Medium",
+            "category": "Security Misconfiguration",
+            "description": "Content Security Policy header is missing.",
+            "recommendation": "Configure the Content-Security-Policy header."
+        },
+        {
+            "title": "Missing HSTS",
+            "severity": "Medium",
+            "category": "Security Misconfiguration",
+            "description": "HSTS header is missing.",
+            "recommendation": "Configure the Strict-Transport-Security header."
+        }
+    ]
+}

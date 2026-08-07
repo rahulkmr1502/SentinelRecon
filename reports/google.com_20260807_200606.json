@@ -1,0 +1,18 @@
+{
+    "target": "google.com",
+    "generated_at": "2026-08-07T20:06:06.679006",
+    "services": [
+        {
+            "port": 22,
+            "service": "SSH",
+            "product": "OpenSSH",
+            "version": "6.6.1p1"
+        },
+        {
+            "port": 80,
+            "service": "HTTP",
+            "product": "Apache",
+            "version": "2.4.7"
+        }
+    ]
+}
