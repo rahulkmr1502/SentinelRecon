@@ -1,0 +1,8 @@
+{
+    "scanner": {
+        "start_port": 80,
+        "end_port": 443,
+        "timeout": 2.0,
+        "max_workers": 20
+    }
+}

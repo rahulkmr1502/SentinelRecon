@@ -1,0 +1,82 @@
+{
+    "target": "github.com",
+    "generated_at": "2026-08-08T16:53:48.775479",
+    "services": [
+        {
+            "port": 22,
+            "service": "SSH",
+            "product": "Unknown",
+            "version": "Unknown",
+            "banner": "SSH-2.0-7f27de7"
+        },
+        {
+            "port": 80,
+            "service": "HTTP",
+            "product": "Unknown",
+            "version": "Unknown",
+            "banner": "HTTP/1.1 301 Moved Permanently\r\nContent-Length: 0\r\nLocation: https://20.207.73.82/\r\nconnection: close"
+        },
+        {
+            "port": 443,
+            "service": "Unknown",
+            "product": "Unknown",
+            "version": "Unknown",
+            "banner": ""
+        }
+    ],
+    "security_findings": [
+        {
+            "title": "Missing Strict-Transport-Security Header",
+            "severity": "Medium",
+            "category": "Security Misconfiguration",
+            "description": "The application does not enforce HTTPS using HSTS.",
+            "recommendation": "Configure the Strict-Transport-Security header."
+        },
+        {
+            "title": "Missing Content-Security-Policy Header",
+            "severity": "Medium",
+            "category": "Security Misconfiguration",
+            "description": "The application does not define a Content Security Policy.",
+            "recommendation": "Configure the Content-Security-Policy header."
+        },
+        {
+            "title": "Missing X-Frame-Options Header",
+            "severity": "Medium",
+            "category": "Security Misconfiguration",
+            "description": "The application may be vulnerable to clickjacking.",
+            "recommendation": "Configure the X-Frame-Options header."
+        },
+        {
+            "title": "Missing X-Content-Type-Options Header",
+            "severity": "Low",
+            "category": "Security Misconfiguration",
+            "description": "Browsers may MIME-sniff responses.",
+            "recommendation": "Configure the X-Content-Type-Options header."
+        },
+        {
+            "title": "Missing Referrer-Policy Header",
+            "severity": "Low",
+            "category": "Security Misconfiguration",
+            "description": "Sensitive URL information may leak through the Referer header.",
+            "recommendation": "Configure the Referrer-Policy header."
+        },
+        {
+            "title": "Missing Permissions-Policy Header",
+            "severity": "Low",
+            "category": "Security Misconfiguration",
+            "description": "Browser features are not explicitly restricted.",
+            "recommendation": "Configure the Permissions-Policy header."
+        }
+    ],
+    "known_vulnerabilities": [],
+    "risk_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "informational": 0,
+        "total": 0,
+        "average_cvss": 0.0,
+        "overall_risk": "None"
+    }
+}

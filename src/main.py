@@ -1,5 +1,6 @@
 from core.banner_grabber import grab_banner
-from core.config import ScannerConfig
+from core.config_loader import load_config
+from core.config_factory import create_scanner_config
 from core.cve_matcher import lookup_service_cves
 from core.dns_resolver import resolve_target
 from core.http_analyzer import analyze_http
@@ -29,6 +30,20 @@ def main() -> None:
         logger.warning("Invalid target: %s", target)
         print("Invalid IP address or domain.")
         return
+
+    # ==========================================================
+    # Configuration
+    # ==========================================================
+
+    config_data = load_config()
+    config = create_scanner_config(config_data)
+
+    print("\nScanner Configuration")
+    print("-" * 50)
+    print(f"Start Port  : {config.start_port}")
+    print(f"End Port    : {config.end_port}")
+    print(f"Timeout     : {config.timeout}")
+    print(f"Max Workers : {config.max_workers}")
 
     # ==========================================================
     # DNS Resolution
@@ -62,8 +77,6 @@ def main() -> None:
 
     print(f"\nScanning TCP ports on {target_ip}...")
     print("Please wait...\n")
-
-    config = ScannerConfig()
 
     open_ports = scan_ports(target_ip, config)
 

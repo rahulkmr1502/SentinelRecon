@@ -1,0 +1,93 @@
+{
+    "target": "google.com",
+    "generated_at": "2026-08-07T21:44:32.655949",
+    "services": [
+        {
+            "port": 80,
+            "service": "HTTP",
+            "product": "gws",
+            "version": "Unknown",
+            "banner": "HTTP/1.1 301 Moved Permanently\r\nLocation: http://www.google.com/\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-UNb8M7_f1-dv3IL66RrBSw' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp\r\nDate: Fri, 07 Aug 2026 16:14:23 GMT\r\nExpires: Sun, 06 Sep 2026 16:14:23 GMT\r\nCache-Control: public, max-age=2592000\r\nServer: gws\r\nContent-Length: 219\r\nX-XSS-Protection: 0\r\nX-Frame-Options: SAMEORIGIN\r\nConnection: close"
+        },
+        {
+            "port": 443,
+            "service": "Unknown",
+            "product": "Unknown",
+            "version": "Unknown",
+            "banner": ""
+        }
+    ],
+    "security_findings": [
+        {
+            "title": "Missing Strict-Transport-Security Header",
+            "severity": "Medium",
+            "category": "Security Misconfiguration",
+            "description": "The application does not enforce HTTPS using HSTS.",
+            "recommendation": "Configure the Strict-Transport-Security header."
+        },
+        {
+            "title": "Missing Content-Security-Policy Header",
+            "severity": "Medium",
+            "category": "Security Misconfiguration",
+            "description": "The application does not define a Content Security Policy.",
+            "recommendation": "Configure the Content-Security-Policy header."
+        },
+        {
+            "title": "Missing X-Content-Type-Options Header",
+            "severity": "Low",
+            "category": "Security Misconfiguration",
+            "description": "Browsers may MIME-sniff responses.",
+            "recommendation": "Configure the X-Content-Type-Options header."
+        },
+        {
+            "title": "Missing Referrer-Policy Header",
+            "severity": "Low",
+            "category": "Security Misconfiguration",
+            "description": "Sensitive URL information may leak through the Referer header.",
+            "recommendation": "Configure the Referrer-Policy header."
+        },
+        {
+            "title": "Missing Permissions-Policy Header",
+            "severity": "Low",
+            "category": "Security Misconfiguration",
+            "description": "Browser features are not explicitly restricted.",
+            "recommendation": "Configure the Permissions-Policy header."
+        }
+    ],
+    "known_vulnerabilities": [
+        {
+            "cve_id": "CVE-2000-0720",
+            "severity": "MEDIUM",
+            "cvss_score": 5.0,
+            "published": "2000-10-20T04:00:00.000",
+            "last_modified": "2026-06-16T21:52:20.387",
+            "description": "news.cgi in GWScripts News Publisher does not properly authenticate requests to add an author to the author index, which allows remote attackers to add new authors by directly posting an HTTP request to the new.cgi program with an addAuthor parameter, and setting the Referer to the news.cgi program."
+        },
+        {
+            "cve_id": "CVE-2014-1962",
+            "severity": "MEDIUM",
+            "cvss_score": 5.0,
+            "published": "2014-02-14T15:55:07.500",
+            "last_modified": "2026-06-17T00:05:49.097",
+            "description": "Gwsync in SAP CRM 7.02 EHP 2 allows remote attackers to obtain sensitive information via unspecified vectors, related to an XML External Entity (XXE) issue."
+        },
+        {
+            "cve_id": "CVE-2026-46276",
+            "severity": "MEDIUM",
+            "cvss_score": 5.5,
+            "published": "2026-06-08T17:16:45.103",
+            "last_modified": "2026-07-23T07:10:00.113",
+            "description": "In the Linux kernel, the following vulnerability has been resolved:\n\ndrm/amdgpu: fix zero-size GDS range init on RDNA4\n\nRDNA4 (GFX 12) hardware removes the GDS, GWS, and OA on-chip memory\nresources. The gfx_v12_0 initialisation code correctly leaves\nadev->gds.gds_size, adev->gds.gws_size, and adev->gds.oa_size at\nzero to reflect this.\n\namdgpu_ttm_init() unconditionally calls amdgpu_ttm_init_on_chip() for\neach of these resources regardless of size. When the size is zero,\namdgpu_ttm_init_on_chip() forwards the call to ttm_range_man_init(),\nwhich calls drm_mm_init(mm, 0, 0). drm_mm_init() immediately fires\nDRM_MM_BUG_ON(start + size <= start) -- trivially true when size is\nzero -- crashing the kernel during modprobe of amdgpu on an RX 9070 XT.\n\nGuard against this by returning 0 early from\namdgpu_ttm_init_on_chip() when size_in_page is zero. This skips TTM\nresource manager registration for hardware resources that are absent,\nwithout affecting any other GPU type.\n\nDRM_MM_BUG_ON() only asserts if CONFIG_DRM_DEBUG_MM is enabled in\nthe kernel config.  This is apparently rarely enabled as these chips\nhave been in the market for over a year and this issue was only reported\nnow.\n\nOops-Analysis: http://oops.fenrus.org/reports/bugzilla.korg/221376/report.html\n(cherry picked from commit 5719ce5865279cad4fd5f01011fe037168503f2d)"
+        }
+    ],
+    "risk_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 0,
+        "informational": 0,
+        "total": 3,
+        "average_cvss": 5.17,
+        "overall_risk": "Medium"
+    }
+}
