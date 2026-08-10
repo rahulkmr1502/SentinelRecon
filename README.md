@@ -1,1145 +1,544 @@
 # SentinelRecon
 
-A professional Python-based Network Reconnaissance & Vulnerability Assessment Tool built from scratch for learning cybersecurity, networking, and software engineering.
+SentinelRecon is a Python-based network reconnaissance and vulnerability assessment tool designed for authorized security testing and educational purposes.
 
-SentinelRecon is designed to demonstrate how a reconnaissance and vulnerability assessment workflow works internally using Python socket programming, HTTP/TLS analysis, service fingerprinting, CVE intelligence, risk assessment, and automated security reporting.
+The tool performs target validation, DNS resolution, TCP port scanning, banner grabbing, service fingerprinting, HTTP/HTTPS analysis, TLS certificate inspection, security misconfiguration detection, CVE lookup, risk analysis, and automated HTML/JSON report generation.
 
-> **Important:** Use SentinelRecon only against systems that you own or have explicit authorization to assess.
+> Disclaimer: SentinelRecon should only be used against systems that you own or have explicit permission to test.
 
----
+## Features
 
-# Table of Contents
+### 1. Target Validation
 
-- [Overview](#overview)
-- [Features](#features)
-- [Complete Workflow](#complete-workflow)
-- [Project Structure](#project-structure)
-- [Milestone 1 - Project Setup](#milestone-1---project-setup)
-- [Milestone 2 - DNS Resolution](#milestone-2---dns-resolution)
-- [Milestone 3 - TCP Port Scanner](#milestone-3---tcp-port-scanner)
-- [Milestone 4 - Banner Grabbing](#milestone-4---banner-grabbing)
-- [Milestone 5 - Code Refactoring](#milestone-5---code-refactoring)
-- [Milestone 6 - HTTP and TLS Analysis](#milestone-6---http-and-tls-analysis)
-- [Milestone 7 - Security Misconfiguration Detection](#milestone-7---security-misconfiguration-detection)
-- [Milestone 8 - CVE Lookup](#milestone-8---cve-lookup)
-- [Milestone 9 - Risk Assessment](#milestone-9---risk-assessment)
-- [Milestone 10 - HTML Reporting](#milestone-10---html-reporting)
-- [Milestone 11 - JSON Reporting](#milestone-11---json-reporting)
-- [Technologies Used](#technologies-used)
-- [Cybersecurity Concepts Covered](#cybersecurity-concepts-covered)
-- [Reports](#reports)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Learning Objectives](#learning-objectives)
-- [Project Progress](#project-progress)
-- [Upcoming Features](#upcoming-features)
-- [Responsible Use](#responsible-use)
-- [Author](#author)
-- [License](#license)
+- IPv4 validation
+- IPv6 validation
+- Domain validation
+- Invalid target detection
 
----
+### 2. DNS Resolution
 
-# Overview
+- Resolves domains to IP addresses
+- Supports IPv4 and IPv6
+- Removes duplicate addresses
+- Sorts resolved addresses
 
-SentinelRecon performs a modular network reconnaissance and vulnerability assessment workflow.
+### 3. TCP Port Scanning
 
-The scanner accepts an IP address or domain and performs:
-
-1. Target validation
-2. DNS resolution
-3. IPv4/IPv6 discovery
-4. Concurrent TCP port scanning
-5. Banner grabbing
-6. Service fingerprinting
-7. HTTP analysis
-8. Security header analysis
-9. TLS certificate inspection
-10. Security misconfiguration detection
-11. CVE lookup
-12. CVSS analysis
-13. Risk assessment
-14. HTML report generation
-15. JSON report generation
-
-The project was developed milestone-by-milestone to understand the internal implementation of common cybersecurity reconnaissance and vulnerability assessment functionality.
-
----
-
-# Features
-
-- Target validation
-- DNS resolution
-- IPv4 support
-- IPv6 support
-- Concurrent TCP port scanning
+- TCP port scanning
 - Configurable port range
 - Configurable timeout
-- Open port detection
-- TCP socket programming
-- Banner grabbing
-- SSH banner detection
-- HTTP banner parsing
-- Product detection
-- Version extraction
-- Service fingerprinting
-- HTTP service analysis
-- HTTP response parsing
-- HTTP header extraction
-- Security header analysis
-- HTTPS support
-- TLS certificate inspection
-- TLS version detection
-- Certificate issuer detection
-- Certificate subject detection
-- Certificate validity analysis
-- Certificate expiry analysis
-- Security misconfiguration detection
-- Security severity classification
-- Security recommendations
-- NIST NVD API integration
-- CVE lookup
-- CVE response parsing
-- Product and version matching
-- CVSS score extraction
-- CVE severity extraction
-- Vulnerability enumeration
-- Risk summary
-- Average CVSS calculation
-- Overall risk calculation
-- HTML report generation
-- JSON report generation
-- Machine-readable security reports
-- Logging
-- Modular architecture
+- Concurrent scanning using ThreadPoolExecutor
+- Configurable maximum workers
 
----
+### 4. Banner Grabbing
 
-# Complete Workflow
+- Connects to discovered services
+- Retrieves service banners
+- Sends HTTP requests to HTTP services
+- Handles connection failures
 
-```text
-                         SentinelRecon
-                              |
-                              v
-                     Target Input
-                              |
-                              v
-                    Target Validation
-                              |
-                              v
-                       DNS Resolution
-                              |
-                     +--------+--------+
-                     |                 |
-                     v                 v
-                   IPv4              IPv6
-                     |
-                     v
-             TCP Port Scanning
-                     |
-                     v
-             Open Port Detection
-                     |
-                     v
-              Banner Grabbing
-                     |
-                     v
-           Service Fingerprinting
-                     |
-          +----------+----------+
-          |                     |
-          v                     v
-    HTTP Analysis          TLS Analysis
-          |                     |
-          v                     v
- Security Headers       X.509 Certificate
-    Analysis                Inspection
-          |                     |
-          +----------+----------+
-                     |
-                     v
-      Security Misconfiguration
-             Detection
-                     |
-                     v
-                CVE Lookup
-                     |
-                     v
-               CVSS Analysis
-                     |
-                     v
-              Risk Assessment
-                     |
-              +------+------+
-              |             |
-              v             v
-         HTML Report    JSON Report
-```
+### 5. Service Fingerprinting
 
----
+- Detects common services
+- Identifies products
+- Identifies versions
+- Parses service information from banners
 
-# Project Structure
+### 6. HTTP Analysis
 
-```text
-SentinelRecon/
-│
-├── src/
-│   ├── main.py
-│   │
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── banner_grabber.py
-│   │   ├── config.py
-│   │   ├── cve.py
-│   │   ├── cve_matcher.py
-│   │   ├── cve_parser.py
-│   │   ├── dns_resolver.py
-│   │   ├── findings.py
-│   │   ├── http_analyzer.py
-│   │   ├── json_report_generator.py
-│   │   ├── logger.py
-│   │   ├── misconfig_detector.py
-│   │   ├── nvd_client.py
-│   │   ├── port_scanner.py
-│   │   ├── report_generator.py
-│   │   ├── risk_analyzer.py
-│   │   ├── risk_summary.py
-│   │   ├── service_fingerprint.py
-│   │   ├── severity.py
-│   │   ├── tls_analyzer.py
-│   │   └── validator.py
-│   │
-│   ├── test_cve_parser.py
-│   ├── test_http.py
-│   ├── test_json_report.py
-│   └── test_tls.py
-│
-├── logs/
-│
-├── reports/
-│   ├── *.html
-│   └── *.json
-│
-├── README.md
-└── requirements.txt
-```
+The HTTP analyzer checks:
 
----
+- HTTP status code
+- Server information
+- Content-Type
+- HTTP response headers
 
-# Milestone 1 - Project Setup
+Security headers checked:
 
-## Features Completed
+- Strict-Transport-Security
+- Content-Security-Policy
+- X-Frame-Options
+- X-Content-Type-Options
+- Referrer-Policy
+- Permissions-Policy
 
-- Professional project structure
-- Modular architecture
-- Logging configuration
-- Target validation
-- GitHub repository setup
-- Initial Python scanner structure
+### 7. TLS Analysis
 
-## Main Concepts
+The TLS analyzer checks:
 
-- Python project organization
-- Modules
-- Packages
-- Logging
-- Input validation
-- Git/GitHub workflow
+- TLS version
+- Certificate issuer
+- Certificate subject
+- Certificate validity
+- Certificate expiration
+- Remaining validity days
+- Certificate status
 
----
+### 8. Security Misconfiguration Detection
 
-# Milestone 2 - DNS Resolution
+SentinelRecon detects missing security headers and generates structured findings containing:
 
-## Features Completed
+- Title
+- Severity
+- Category
+- Description
+- Recommendation
 
-- DNS resolution
-- IPv4 address resolution
-- IPv6 address resolution
-- Multiple address handling
-- Logging of resolved addresses
-- Graceful DNS error handling
+### 9. CVE Lookup
 
-## Sample Output
+SentinelRecon integrates with the NIST National Vulnerability Database (NVD).
 
-```text
-Enter an IP address or domain: google.com
+The CVE module can retrieve:
 
-Resolving 'google.com'...
+- CVE ID
+- Severity
+- CVSS score
+- Published date
+- Last modified date
+- Vulnerability description
 
-Resolved Addresses:
- - 192.178.158.100
- - 192.178.158.101
- - 192.178.158.102
- - 192.178.158.113
- - 192.178.158.138
- - 192.178.158.139
- - 2404:6800:4002:81a::200e
-```
+### 10. Risk Analysis
 
----
+The risk analyzer calculates:
 
-# Milestone 3 - TCP Port Scanner
+- Critical vulnerabilities
+- High vulnerabilities
+- Medium vulnerabilities
+- Low vulnerabilities
+- Informational vulnerabilities
+- Total CVEs
+- Average CVSS score
+- Overall risk level
 
-## Features Completed
+### 11. Configuration Support
 
-- TCP socket scanning
-- Concurrent scanning
-- Configurable port range
-- Timeout configuration
-- Open port detection
-- Scan logging
-- ThreadPoolExecutor implementation
+Scanner configuration is supported through config.json.
 
-## Sample Output
+Example configuration:
 
-```text
-Scanning TCP ports on 192.178.158.100...
-Please wait...
-
-========================================================================
-PORT    SERVICE        PRODUCT             VERSION
-========================================================================
-80      HTTP           gws                 Unknown
-443     Unknown        Unknown             Unknown
-========================================================================
-Total Open Ports Found: 2
-```
-
----
-
-# Milestone 4 - Banner Grabbing
-
-## Features Completed
-
-- TCP banner grabbing
-- SSH banner detection
-- HTTP banner detection
-- Product detection
-- Version extraction
-- Service identification
-- Structured service results
-- Professional tabular output
-
-## Sample Output
-
-```text
-========================================================================
-PORT    SERVICE        PRODUCT             VERSION
-========================================================================
-22      SSH            OpenSSH             6.6.1p1
-80      HTTP           Apache              2.4.7
-========================================================================
-```
-
-The scanner converts raw service banners into structured information:
-
-```text
-Port
-Service
-Product
-Version
-```
-
-This information is later used for vulnerability matching.
-
----
-
-# Milestone 5 - Code Refactoring
-
-## Features Completed
-
-- Code refactoring
-- Separation of concerns
-- Configuration using dataclasses
-- Dedicated service fingerprinting
-- Modular scanner components
-- Cleaner imports
-- Improved project architecture
-- Reduced coupling between modules
-
-## Architecture
-
-The scanner was separated into dedicated modules for:
-
-```text
-Validation
-DNS
-Port Scanning
-Banner Grabbing
-Service Fingerprinting
-HTTP Analysis
-TLS Analysis
-CVE Processing
-Risk Analysis
-Reporting
-Logging
-```
-
-This makes the project easier to maintain and extend.
-
----
-
-# Milestone 6 - HTTP and TLS Analysis
-
-## HTTP Features
-
-- Raw HTTP GET requests using sockets
-- HTTP response parsing
-- HTTP status code extraction
-- Server header extraction
-- Content-Type extraction
-- Security header analysis
-
-## TLS Features
-
-- HTTPS support
-- TLS connection
-- TLS version detection
-- Certificate inspection
-- Certificate issuer detection
-- Certificate subject detection
-- Certificate validity dates
-- Certificate expiry analysis
-- Days remaining calculation
-- Certificate status detection
-
-## Sample Output
-
-```text
-HTTP Analysis
---------------------------------------------------
-Status Code : 301
-Server      : gws
-Content-Type: text/html; charset=UTF-8
-
-Security Header Analysis
---------------------------------------------------
-Strict-Transport-Security           ✗ Missing
-Content-Security-Policy             ✗ Missing
-X-Frame-Options                     ✓ Present
-X-Content-Type-Options              ✗ Missing
-Referrer-Policy                     ✗ Missing
-Permissions-Policy                  ✗ Missing
-
-TLS Analysis
---------------------------------------------------
-TLS Version        : TLSv1.3
-Issuer             : Google Trust Services
-Subject            : *.google.com
-Valid From         : Jun 29 08:37:25 2026 GMT
-Valid Until        : Sep 21 08:37:24 2026 GMT
-Certificate Status : Valid
-Days Remaining     : 46
-```
-
----
-
-# Milestone 7 - Security Misconfiguration Detection
-
-## Features Completed
-
-- Security header validation
-- Missing HSTS detection
-- Missing CSP detection
-- Missing X-Content-Type-Options detection
-- Missing Referrer-Policy detection
-- Missing Permissions-Policy detection
-- Security severity classification
-- Security recommendations
-- Structured Finding objects
-
-## Security Headers Checked
-
-```text
-Strict-Transport-Security
-Content-Security-Policy
-X-Frame-Options
-X-Content-Type-Options
-Referrer-Policy
-Permissions-Policy
-```
-
-## Sample Output
-
-```text
-Security Findings
-======================================================================
-Title          : Missing Strict-Transport-Security Header
-Severity       : Medium
-Category       : Security Misconfiguration
-Description    : The application does not enforce HTTPS using HSTS.
-Recommendation : Configure the Strict-Transport-Security header.
-----------------------------------------------------------------------
-
-Title          : Missing Content-Security-Policy Header
-Severity       : Medium
-Category       : Security Misconfiguration
-Description    : The application does not define a Content Security Policy.
-Recommendation : Configure the Content-Security-Policy header.
-----------------------------------------------------------------------
-
-Title          : Missing X-Content-Type-Options Header
-Severity       : Low
-Category       : Security Misconfiguration
-Description    : Browsers may MIME-sniff responses.
-Recommendation : Configure the X-Content-Type-Options header.
-----------------------------------------------------------------------
-```
-
----
-
-# Milestone 8 - CVE Lookup
-
-## Features Completed
-
-- NIST NVD API integration
-- CVE search
-- CVE response parsing
-- CVE data modeling
-- Product matching
-- Version matching
-- CVSS score extraction
-- Severity extraction
-- Published date extraction
-- Last modified date extraction
-- Vulnerability enumeration
-
-## CVE Data
-
-Each CVE contains:
-
-```text
-CVE ID
-Description
-Severity
-CVSS Score
-Published Date
-Last Modified Date
-```
-
-## Sample Output
-
-```text
-Known Vulnerabilities
-======================================================================
-
-gws Unknown
-----------------------------------------------------------------------
-
-CVE ID      : CVE-2000-0720
-Severity    : MEDIUM
-CVSS Score  : 5.0
-Published   : 2000-10-20T04:00:00.000
-Description : news.cgi in GWScripts News Publisher does not properly
-authenticate requests...
-----------------------------------------------------------------------
-
-CVE ID      : CVE-2014-1962
-Severity    : MEDIUM
-CVSS Score  : 5.0
-Published   : 2014-02-14T15:55:07.500
-Description : Gwsync in SAP CRM 7.02 EHP 2 allows remote attackers...
-----------------------------------------------------------------------
-```
-
----
-
-# Milestone 9 - Risk Assessment
-
-## Features Completed
-
-- RiskSummary model
-- CVSS score analysis
-- Severity counting
-- Critical count
-- High count
-- Medium count
-- Low count
-- Informational count
-- Total CVE count
-- Average CVSS calculation
-- Overall risk calculation
-
-## Risk Summary
-
-The scanner converts CVE information into an overall security risk assessment.
-
-## Sample Output
-
-```text
-Risk Summary
-======================================================================
-Critical       : 0
-High           : 0
-Medium         : 3
-Low            : 0
-Informational  : 0
-Total CVEs     : 3
-Average CVSS   : 5.17
-Overall Risk   : Medium
-```
-
-Example risk result:
-
-```text
-RiskSummary(
-    critical=2,
-    high=5,
-    medium=4,
-    low=1,
-    informational=0,
-    total=12,
-    average_cvss=8.1,
-    overall_risk='High'
-)
-```
-
----
-
-# Milestone 10 - HTML Reporting
-
-## Features Completed
-
-- HTML report generation
-- Timestamped report filenames
-- Reports directory
-- Target information
-- Service information
-- Security findings
-- Known vulnerabilities
-- CVSS information
-- Risk summary
-- Human-readable security report
-
-## Sample Output
-
-```text
-Report Created:
-
-reports/google.com_20260806_092025.html
-```
-
-## HTML Report Contents
-
-```text
-Target Information
-        ↓
-Scan Information
-        ↓
-Detected Services
-        ↓
-Security Findings
-        ↓
-Known Vulnerabilities
-        ↓
-Risk Summary
-```
-
-HTML reports are intended for human-readable security assessment results.
-
----
-
-# Milestone 11 - JSON Reporting
-
-## Features Completed
-
-- JSON report generation
-- Timestamped JSON filenames
-- Target information export
-- Scan timestamp export
-- Service information export
-- Security findings export
-- CVE information export
-- CVSS score export
-- Risk summary export
-- Overall risk export
-- Machine-readable report
-- Integration with the main scanner
-
-## JSON Report Structure
-
-```text
-JSON Report
-│
-├── target
-├── generated_at
-├── services
-│   ├── port
-│   ├── service
-│   ├── product
-│   └── version
-│
-├── security_findings
-│   ├── title
-│   ├── severity
-│   ├── category
-│   ├── description
-│   └── recommendation
-│
-├── known_vulnerabilities
-│   ├── cve_id
-│   ├── severity
-│   ├── cvss_score
-│   ├── published
-│   ├── last_modified
-│   └── description
-│
-└── risk_summary
-    ├── critical
-    ├── high
-    ├── medium
-    ├── low
-    ├── informational
-    ├── total
-    ├── average_cvss
-    └── overall_risk
-```
-
-## Sample JSON Report
-
-```json
-{
-    "target": "google.com",
-    "generated_at": "2026-08-07T20:22:58.978707",
-    "services": [
-        {
-            "port": 22,
-            "service": "SSH",
-            "product": "OpenSSH",
-            "version": "6.6.1p1"
-        },
-        {
-            "port": 80,
-            "service": "HTTP",
-            "product": "Apache",
-            "version": "2.4.7"
+    {
+        "scanner": {
+            "start_port": 80,
+            "end_port": 443,
+            "timeout": 2.0,
+            "max_workers": 20
         }
-    ],
-    "security_findings": [
-        {
-            "title": "Missing CSP",
-            "severity": "Medium",
-            "category": "Security Misconfiguration",
-            "description": "Content Security Policy header is missing.",
-            "recommendation": "Configure the Content-Security-Policy header."
-        },
-        {
-            "title": "Missing HSTS",
-            "severity": "Medium",
-            "category": "Security Misconfiguration",
-            "description": "HSTS header is missing.",
-            "recommendation": "Configure the Strict-Transport-Security header."
-        }
-    ],
-    "known_vulnerabilities": [
-        {
-            "cve_id": "CVE-2021-44228",
-            "severity": "CRITICAL",
-            "cvss_score": 10.0,
-            "published": "2021-12-10",
-            "last_modified": "2021-12-15",
-            "description": "Example critical vulnerability."
-        },
-        {
-            "cve_id": "CVE-2024-12345",
-            "severity": "HIGH",
-            "cvss_score": 8.8,
-            "published": "2024-01-15",
-            "last_modified": "2024-02-01",
-            "description": "Example high severity vulnerability."
-        }
-    ],
-    "risk_summary": {
-        "critical": 1,
-        "high": 1,
-        "medium": 0,
-        "low": 0,
-        "informational": 0,
-        "total": 2,
-        "average_cvss": 9.4,
-        "overall_risk": "Critical"
     }
-}
-```
 
----
+Configuration options:
 
-# Complete Scanner Output
+| Option | Description |
+|--------|-------------|
+| start_port | First TCP port to scan |
+| end_port | Last TCP port to scan |
+| timeout | Socket connection timeout |
+| max_workers | Maximum concurrent workers |
 
-A complete scan can produce results across all major assessment stages.
+If config.json does not exist or contains invalid JSON, SentinelRecon automatically uses the default configuration.
 
-```text
-Enter an IP address or domain: google.com
+### 12. HTML Reports
 
-Resolving 'google.com'...
+SentinelRecon generates timestamped HTML reports.
 
-Resolved Addresses:
- - 192.178.158.100
- - 192.178.158.101
- - 192.178.158.102
- - 192.178.158.113
- - 192.178.158.138
- - 192.178.158.139
- - 2404:6800:4002:81a::200e
-
-Scanning TCP ports on 192.178.158.100...
-Please wait...
-
-========================================================================
-PORT    SERVICE        PRODUCT             VERSION
-========================================================================
-80      HTTP           gws                 Unknown
-443     Unknown        Unknown             Unknown
-========================================================================
-Total Open Ports Found: 2
-
-HTTP Analysis
---------------------------------------------------
-Status Code : 301
-Server      : gws
-Content-Type: text/html; charset=UTF-8
-
-Security Header Analysis
---------------------------------------------------
-Strict-Transport-Security           ✗ Missing
-Content-Security-Policy             ✗ Missing
-X-Frame-Options                     ✓ Present
-X-Content-Type-Options              ✗ Missing
-Referrer-Policy                     ✗ Missing
-Permissions-Policy                  ✗ Missing
-
-Security Findings
-======================================================================
-Title          : Missing Strict-Transport-Security Header
-Severity       : Medium
-Category       : Security Misconfiguration
-Description    : The application does not enforce HTTPS using HSTS.
-Recommendation : Configure the Strict-Transport-Security header.
-----------------------------------------------------------------------
-
-Title          : Missing Content-Security-Policy Header
-Severity       : Medium
-Category       : Security Misconfiguration
-Description    : The application does not define a Content Security Policy.
-Recommendation : Configure the Content-Security-Policy header.
-----------------------------------------------------------------------
-
-TLS Analysis
---------------------------------------------------
-TLS Version        : TLSv1.3
-Issuer             : Google Trust Services
-Subject            : *.google.com
-Valid From         : Jun 29 08:37:25 2026 GMT
-Valid Until        : Sep 21 08:37:24 2026 GMT
-Certificate Status : Valid
-Days Remaining     : 46
-
-Known Vulnerabilities
-======================================================================
-
-gws Unknown
-----------------------------------------------------------------------
-
-CVE ID      : CVE-2000-0720
-Severity    : MEDIUM
-CVSS Score  : 5.0
-Published   : 2000-10-20T04:00:00.000
-Description : Example vulnerability description...
-----------------------------------------------------------------------
-
-Risk Summary
-======================================================================
-Critical       : 0
-High           : 0
-Medium         : 3
-Low            : 0
-Informational  : 0
-Total CVEs     : 3
-Average CVSS   : 5.17
-Overall Risk   : Medium
-
-HTML Report Created:
-reports/google.com_20260806_092025.html
-
-JSON Report Created:
-reports/google.com_20260807_XXXXXX.json
-```
-
----
-
-# Reports
-
-SentinelRecon generates two report formats.
-
-```text
-reports/
-│
-├── google.com_20260806_092025.html
-├── google.com_20260807_XXXXXX.html
-└── google.com_20260807_XXXXXX.json
-```
-
-## HTML Report
-
-The HTML report is designed for human-readable security analysis.
-
-It contains:
+Reports contain:
 
 - Target information
-- Scan information
-- Detected services
-- Open ports
-- HTTP analysis
-- TLS analysis
+- Open services
 - Security findings
 - Known vulnerabilities
-- CVSS information
 - Risk summary
+- Generation timestamp
 
-## JSON Report
+Reports are saved in:
 
-The JSON report is designed for machine-readable security data.
+    reports/
 
-It contains:
+Example:
+
+    reports/google.com_20260808_175326.html
+
+### 13. JSON Reports
+
+SentinelRecon generates structured JSON vulnerability assessment reports.
+
+The JSON report contains:
 
 - Target
-- Timestamp
+- Generation timestamp
 - Services
 - Security findings
 - Known vulnerabilities
-- CVE metadata
-- CVSS scores
 - Risk summary
-- Overall risk
 
-JSON reports can later be used for:
+Example:
 
-- Security dashboards
-- Automation
-- Data processing
-- API integrations
-- SIEM integrations
-- Vulnerability management systems
+    {
+        "target": "example.com",
+        "generated_at": "2026-08-08T17:53:26",
+        "services": [
+            {
+                "port": 80,
+                "service": "HTTP",
+                "product": "Apache",
+                "version": "2.4.7"
+            }
+        ],
+        "security_findings": [],
+        "known_vulnerabilities": [],
+        "risk_summary": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0,
+            "informational": 0,
+            "total": 0,
+            "average_cvss": 0.0,
+            "overall_risk": "None"
+        }
+    }
 
----
+JSON reports are saved in:
 
-# Technologies Used
+    reports/
 
-- Python 3
-- Socket Programming
-- SSL/TLS
-- ThreadPoolExecutor
-- Logging
-- Regular Expressions
-- Dataclasses
-- HTTP
-- NIST NVD API
-- JSON
-- HTML5
-- CSS3
-- pathlib
+## Project Architecture
 
----
+The SentinelRecon scanning pipeline is:
 
-# Cybersecurity Concepts Covered
+    User Input
+        |
+        v
+    Target Validation
+        |
+        v
+    DNS Resolution
+        |
+        v
+    TCP Port Scanning
+        |
+        v
+    Banner Grabbing
+        |
+        v
+    Service Fingerprinting
+        |
+        +-------------------+
+        |                   |
+        v                   v
+    HTTP Analysis       TLS Analysis
+        |                   |
+        v                   v
+    Security            Certificate
+    Findings            Analysis
+        |                   |
+        +---------+---------+
+                  |
+                  v
+             CVE Lookup
+                  |
+                  v
+             Risk Analysis
+                  |
+            +-----+-----+
+            |           |
+            v           v
+        HTML Report  JSON Report
 
-- Network Reconnaissance
-- Network Enumeration
-- DNS Resolution
-- IPv4
-- IPv6
-- TCP/IP
-- TCP Port Scanning
-- TCP Socket Programming
-- Banner Grabbing
-- Service Fingerprinting
-- HTTP Protocol
-- HTTPS
-- HTTP Headers
-- Security Headers
-- TLS Handshake
-- TLS Versions
-- X.509 Certificates
-- Certificate Validation
-- Security Misconfiguration
-- Vulnerability Assessment
-- CVE
-- NIST National Vulnerability Database
-- CVSS
-- Severity Classification
-- Risk Assessment
-- Security Reporting
-- Machine-Readable Security Reports
+## Project Structure
 
----
-
-# Installation
+    netrecon/
+    |
+    ├── src/
+    │   ├── core/
+    │   │   ├── __init__.py
+    │   │   ├── banner_grabber.py
+    │   │   ├── config.py
+    │   │   ├── config_factory.py
+    │   │   ├── config_loader.py
+    │   │   ├── cve.py
+    │   │   ├── cve_matcher.py
+    │   │   ├── cve_parser.py
+    │   │   ├── dns_resolver.py
+    │   │   ├── findings.py
+    │   │   ├── http_analyzer.py
+    │   │   ├── json_report_generator.py
+    │   │   ├── logger.py
+    │   │   ├── misconfig_detector.py
+    │   │   ├── nvd_client.py
+    │   │   ├── port_scanner.py
+    │   │   ├── report_generator.py
+    │   │   ├── risk_analyzer.py
+    │   │   ├── risk_summary.py
+    │   │   ├── service_fingerprint.py
+    │   │   ├── severity.py
+    │   │   ├── tls_analyzer.py
+    │   │   └── validator.py
+    │   │
+    │   └── main.py
+    │
+    ├── tests/
+    │   ├── test_banner_grabber.py
+    │   ├── test_config.py
+    │   ├── test_cve.py
+    │   ├── test_cve_parser.py
+    │   ├── test_dns.py
+    │   ├── test_finding.py
+    │   ├── test_http.py
+    │   ├── test_json_report.py
+    │   ├── test_matcher.py
+    │   ├── test_misconfig.py
+    │   ├── test_nvd.py
+    │   ├── test_port_scanner.py
+    │   ├── test_report_generator.py
+    │   ├── test_risk_analyzer.py
+    │   ├── test_risk_summary.py
+    │   ├── test_severity.py
+    │   ├── test_tls.py
+    │   └── test_validator.py
+    │
+    ├── reports/
+    ├── config.json
+    ├── requirements.txt
+    └── README.md
 
 ## Requirements
 
-- Python 3
-- Internet connection for NVD API queries
+- Python 3.10+
+- Linux, macOS, or Windows
+- Internet connection for NVD CVE lookups
 - Permission to scan the target system
 
-## Clone Repository
+Python dependency:
 
-```bash
-git clone https://github.com/rahulkmr1502/SentinelRecon.git
-```
+    requests
 
-## Enter Project Directory
+Most scanner functionality uses Python's standard library.
 
-```bash
-cd SentinelRecon
-```
+## Installation
 
-## Install Dependencies
+Clone the repository:
 
-```bash
-pip install -r requirements.txt
-```
+    git clone <your-repository-url>
+    cd netrecon
 
----
+Create a virtual environment:
 
-# Usage
+    python3 -m venv .venv
 
-Run the main scanner:
+Activate the virtual environment on Linux/macOS:
 
-```bash
-python src/main.py
-```
+    source .venv/bin/activate
 
-Enter a domain or IP address:
+Activate the virtual environment on Windows:
 
-```text
-Enter an IP address or domain: example.com
-```
+    .venv\Scripts\activate
 
-SentinelRecon will automatically perform the complete assessment workflow.
+Install dependencies:
 
----
+    pip install -r requirements.txt
 
-# Test Modules
+## Usage
 
-The project also contains individual test files for specific components.
+Run SentinelRecon with:
 
-## CVE Parser Test
+    PYTHONPATH=src python src/main.py
 
-```bash
-python src/test_cve_parser.py
-```
+The scanner will ask for a target:
 
-## HTTP Analyzer Test
+    Enter an IP address or domain: example.com
 
-```bash
-python src/test_http.py
-```
+The scanner performs:
 
-## TLS Analyzer Test
+1. Target validation
+2. DNS resolution
+3. TCP port scanning
+4. Banner grabbing
+5. Service fingerprinting
+6. HTTP analysis
+7. TLS analysis
+8. Security misconfiguration detection
+9. CVE lookup
+10. Risk analysis
+11. HTML report generation
+12. JSON report generation
 
-```bash
-python src/test_tls.py
-```
+## Example Output
 
-## JSON Report Test
+    Enter an IP address or domain: example.com
 
-```bash
-python src/test_json_report.py
-```
+    Resolving 'example.com'...
 
-These tests help verify individual modules before integrating them into the main scanner.
+    Resolved Addresses:
 
----
+    - 93.184.216.34
 
-# Learning Objectives
+    Scanning TCP ports on 93.184.216.34...
+    Please wait...
 
-This project is designed to understand:
+    Total Open Ports Found: 2
 
-- Network reconnaissance
-- TCP socket programming
+    ## HTTP Analysis
+
+    Status Code : 200
+    Server      : ExampleServer
+    Content-Type: text/html
+
+    ## TLS Analysis
+
+    TLS Version        : TLSv1.3
+    Issuer             : Example CA
+    Subject            : example.com
+    Certificate Status : Valid
+
+    # Known Vulnerabilities
+
+    No known vulnerabilities found.
+
+    # Risk Summary
+
+    Critical       : 0
+    High           : 0
+    Medium         : 0
+    Low            : 0
+    Informational  : 0
+    Total CVEs     : 0
+    Average CVSS   : 0.0
+    Overall Risk   : None
+
+    HTML Report Created:
+    reports/example.com_YYYYMMDD_HHMMSS.html
+
+    JSON Report Created:
+    reports/example.com_YYYYMMDD_HHMMSS.json
+
+## Testing
+
+SentinelRecon uses Python's built-in unittest framework.
+
+Run the complete test suite with:
+
+    PYTHONPATH=src python -m unittest discover -s tests -v
+
+Current test result:
+
+    ----------------------------------------------------------------------
+    Ran 46 tests in 0.055s
+
+    OK
+
+All 46 automated tests currently pass successfully.
+
+### Tested Components
+
+The test suite covers:
+
+- Target validation
+- IPv4 validation
+- IPv6 validation
+- Domain validation
 - DNS resolution
-- Port scanning
-- Concurrent programming
-- HTTP internals
-- HTTPS internals
-- TLS communication
-- X.509 certificates
+- TCP port scanning
+- Banner grabbing
 - Service fingerprinting
-- Security header analysis
+- HTTP analysis
+- HTTP security headers
+- TLS analysis
 - Security misconfiguration detection
-- CVE intelligence
-- CVSS scoring
-- Risk assessment
-- Vulnerability reporting
+- CVE model
+- CVE parsing
+- CVE matching
+- NVD API client
+- Severity classification
+- Risk analysis
+- Risk summary
+- Configuration loading
+- Configuration factory
 - HTML report generation
 - JSON report generation
-- Data serialization
-- Modular Python architecture
-- Software engineering practices
-- Cybersecurity assessment workflows
 
----
+### Test Structure
 
-# Project Progress
+All tests are located inside:
 
-| Milestone | Description | Status |
-|---|---|---|
-| 1 | Project Setup | ✅ Completed |
-| 2 | DNS Resolution | ✅ Completed |
-| 3 | TCP Port Scanner | ✅ Completed |
-| 4 | Banner Grabbing | ✅ Completed |
-| 5 | Code Refactoring | ✅ Completed |
-| 6 | HTTP & TLS Analysis | ✅ Completed |
-| 7 | Security Misconfiguration Detection | ✅ Completed |
-| 8 | CVE Lookup | ✅ Completed |
-| 9 | Risk Assessment | ✅ Completed |
-| 10 | HTML Report Generation | ✅ Completed |
-| 11 | JSON Report Generation | ✅ Completed |
+    tests/
 
----
+The project currently contains 46 automated tests.
 
-# Upcoming Features
+Network-dependent functionality is tested using mocks so that the test suite does not require real connections to external systems.
 
-- Configuration File Support
-- Unit Testing
-- Integration Testing
-- Docker Support
-- GitHub Actions CI/CD
-- Logging Improvements
-- Multi-target Scanning
-- Final Refactoring
-- Final Documentation
+## Development Milestones
 
----
+- [x] Milestone 1 — Project Setup
+- [x] Milestone 2 — Logging
+- [x] Milestone 3 — Target Validation
+- [x] Milestone 4 — DNS Resolution
+- [x] Milestone 5 — TCP Port Scanner
+- [x] Milestone 6 — Banner Grabbing
+- [x] Milestone 7 — Service Fingerprinting
+- [x] Milestone 8 — Concurrent Scanning
+- [x] Milestone 9 — HTTP/HTTPS Analysis
+- [x] Milestone 10 — TLS Certificate Inspection
+- [x] Milestone 11 — Misconfiguration Detection
+- [x] Milestone 12 — CVE Lookup
+- [x] Milestone 13 — CVSS / Risk Analysis
+- [x] Milestone 14 — HTML Report Generation
+- [x] Milestone 15 — JSON Export
+- [x] Milestone 16 — Configuration File Support
+- [x] Milestone 17 — Unit Tests
 
-# Responsible Use
+## Technologies Used
 
-SentinelRecon is an educational cybersecurity project intended for:
+- Python
+- Socket Programming
+- ThreadPoolExecutor
+- HTTP
+- TLS/SSL
+- DNS
+- NIST NVD API
+- CVE
+- CVSS
+- JSON
+- HTML
+- unittest
+- unittest.mock
+- Git
+- GitHub
 
-- Learning
-- Research
+## Security Considerations
+
+SentinelRecon performs active network connections against targets.
+
+Only scan:
+
+- Systems you own
 - Lab environments
-- Authorized security testing
-- Systems owned by the user
-- Systems where explicit testing permission has been granted
+- CTF environments
+- Systems where you have explicit authorization
 
-Only scan systems that you are authorized to assess.
+Do not use SentinelRecon to scan unauthorized systems or networks.
 
-Unauthorized scanning or vulnerability assessment may violate laws, policies, or terms of service.
+## Future Improvements
+
+Potential future enhancements include:
+
+- More service fingerprints
+- Additional HTTP security checks
+- More comprehensive TLS analysis
+- Improved CVE matching
+- CVSS v3/v4 support
+- CLI argument support
+- Better logging
+- Integration tests
+- Docker support
+- GitHub Actions CI/CD
+- Improved error handling
+- Performance optimization
+- Additional report visualizations
+
+## Disclaimer
+
+SentinelRecon is an educational security assessment project.
 
 The author is not responsible for misuse of this software.
 
----
-
-# Author
-
-**Rahul Kumar**
-
-GitHub:
-
-https://github.com/rahulkmr1502
-
----
-
-# License
-
-This project is licensed under the MIT License.
+Always obtain proper authorization before performing security scans against a target.
