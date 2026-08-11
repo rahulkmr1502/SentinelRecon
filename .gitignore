@@ -1,5 +1,6 @@
+.venv/
 __pycache__/
 *.pyc
 logs/
-.venv/
-.vscode/
+reports/*.html
+reports/*.json
