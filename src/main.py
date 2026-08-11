@@ -1,6 +1,6 @@
 from core.banner_grabber import grab_banner
-from core.config_loader import load_config
 from core.config_factory import create_scanner_config
+from core.config_loader import load_config
 from core.cve_matcher import lookup_service_cves
 from core.dns_resolver import resolve_target
 from core.http_analyzer import analyze_http
@@ -62,6 +62,8 @@ def main() -> None:
     for address in addresses:
         print(f" - {address}")
 
+    # Prefer IPv4 for TCP scanning because the scanner
+    # currently uses AF_INET sockets.
     target_ip = next(
         (address for address in addresses if "." in address),
         None,
@@ -88,7 +90,7 @@ def main() -> None:
     print(f"{'PORT':<8}{'SERVICE':<15}{'PRODUCT':<20}{'VERSION'}")
     print("=" * 72)
 
-    service_results = []
+    service_results: list[dict] = []
     all_findings = []
     all_cves = []
 
