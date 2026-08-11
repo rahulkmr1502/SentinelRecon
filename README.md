@@ -428,6 +428,33 @@ Current test result:
 
 All 46 automated tests currently pass successfully.
 
+### Integration Testing
+
+SentinelRecon includes integration tests that verify multiple components working together.
+
+The integration test suite currently covers:
+
+- Target validation → DNS resolution → port scanning
+- Port scanning → banner grabbing → service fingerprinting
+- HTTP analysis → security misconfiguration detection
+- CVE lookup → risk analysis
+- TLS certificate analysis
+- Risk analysis → JSON report generation
+
+Integration tests are located in:
+
+    tests/test_integration.py
+
+Current result:
+
+    Ran 6 tests
+    OK
+
+Combined unit and integration test suite:
+
+    Ran 52 tests
+    OK
+
 ### Tested Components
 
 The test suite covers:
@@ -485,6 +512,7 @@ Network-dependent functionality is tested using mocks so that the test suite doe
 - [x] Milestone 15 — JSON Export
 - [x] Milestone 16 — Configuration File Support
 - [x] Milestone 17 — Unit Tests
+- [x] Milestone 18 — Integration Tests
 
 ## Technologies Used
 
