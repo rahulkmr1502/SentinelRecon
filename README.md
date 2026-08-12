@@ -1,59 +1,45 @@
-# SentinelRecon
+# SentinelRecon 🔎
 
-SentinelRecon is a Python-based network reconnaissance and vulnerability assessment tool designed for authorized security testing and educational purposes.
+SentinelRecon is a Python-based network reconnaissance and vulnerability assessment tool designed to perform automated security analysis of authorized IP addresses and domains.
 
-The tool performs target validation, DNS resolution, TCP port scanning, banner grabbing, service fingerprinting, HTTP/HTTPS analysis, TLS certificate inspection, security misconfiguration detection, CVE lookup, risk analysis, and automated HTML/JSON report generation.
-
-> Disclaimer: SentinelRecon should only be used against systems that you own or have explicit permission to test.
+It combines network reconnaissance, service fingerprinting, HTTP/HTTPS analysis, TLS certificate inspection, security misconfiguration detection, CVE lookup, risk analysis, and automated report generation.
 
 ## Features
 
-### 1. Target Validation
-
+### Target Validation
 - IPv4 validation
 - IPv6 validation
 - Domain validation
 - Invalid target detection
 
-### 2. DNS Resolution
-
-- Resolves domains to IP addresses
+### DNS Resolution
+- Resolves domains and IP addresses
 - Supports IPv4 and IPv6
-- Removes duplicate addresses
-- Sorts resolved addresses
+- Displays resolved addresses
 
-### 3. TCP Port Scanning
-
-- TCP port scanning
-- Configurable port range
+### TCP Port Scanning
+- Configurable TCP port range
+- Open port detection
 - Configurable timeout
 - Concurrent scanning using ThreadPoolExecutor
-- Configurable maximum workers
+- Configurable worker count
 
-### 4. Banner Grabbing
+### Service Fingerprinting
+- Banner grabbing
+- Service detection
+- Product identification
+- Version extraction
+- HTTP banner analysis
 
-- Connects to discovered services
-- Retrieves service banners
-- Sends HTTP requests to HTTP services
-- Handles connection failures
+### HTTP Analysis
+- HTTP status code detection
+- Server identification
+- Content-Type detection
+- Security header analysis
 
-### 5. Service Fingerprinting
+### Security Misconfiguration Detection
 
-- Detects common services
-- Identifies products
-- Identifies versions
-- Parses service information from banners
-
-### 6. HTTP Analysis
-
-The HTTP analyzer checks:
-
-- HTTP status code
-- Server information
-- Content-Type
-- HTTP response headers
-
-Security headers checked:
+Checks for missing security headers:
 
 - Strict-Transport-Security
 - Content-Security-Policy
@@ -62,274 +48,184 @@ Security headers checked:
 - Referrer-Policy
 - Permissions-Policy
 
-### 7. TLS Analysis
+### TLS Analysis
+- TLS version detection
+- Certificate issuer extraction
+- Certificate subject extraction
+- Certificate validity checking
+- Certificate expiration analysis
+- Remaining certificate days
 
-The TLS analyzer checks:
+### CVE Lookup
+- NIST NVD API integration
+- Product and version based CVE lookup
+- CVE parsing
+- CVSS score extraction
+- Severity detection
 
-- TLS version
-- Certificate issuer
-- Certificate subject
-- Certificate validity
-- Certificate expiration
-- Remaining validity days
-- Certificate status
-
-### 8. Security Misconfiguration Detection
-
-SentinelRecon detects missing security headers and generates structured findings containing:
-
-- Title
-- Severity
-- Category
-- Description
-- Recommendation
-
-### 9. CVE Lookup
-
-SentinelRecon integrates with the NIST National Vulnerability Database (NVD).
-
-The CVE module can retrieve:
-
-- CVE ID
-- Severity
-- CVSS score
-- Published date
-- Last modified date
-- Vulnerability description
-
-### 10. Risk Analysis
-
-The risk analyzer calculates:
-
-- Critical vulnerabilities
-- High vulnerabilities
-- Medium vulnerabilities
-- Low vulnerabilities
-- Informational vulnerabilities
-- Total CVEs
+### Risk Analysis
+- Critical, High, Medium, Low and Informational classification
+- Total CVE count
 - Average CVSS score
-- Overall risk level
+- Overall risk calculation
 
-### 11. Configuration Support
+### Report Generation
 
-Scanner configuration is supported through config.json.
+SentinelRecon generates:
+
+- HTML reports
+- JSON reports
+- Timestamped report files
+- Security findings
+- CVE information
+- Risk summaries
+
+### Testing
+- Unit tests
+- Integration tests
+- 52 automated tests
+
+Current test result:
+
+    Ran 52 tests
+    OK
+
+### Docker Support
+SentinelRecon can run inside a Docker container using Python 3.12.
+
+### GitHub Actions CI
+The project includes GitHub Actions CI which:
+
+1. Checks out the repository
+2. Sets up Python 3.12
+3. Installs dependencies
+4. Runs the complete test suite
+
+## Project Structure
+
+    SentinelRecon/
+    ├── .github/
+    │   └── workflows/
+    │       └── ci.yml
+    ├── .dockerignore
+    ├── .gitignore
+    ├── Dockerfile
+    ├── LICENSE
+    ├── README.md
+    ├── config.json
+    ├── requirements.txt
+    ├── src/
+    │   ├── __init__.py
+    │   ├── main.py
+    │   └── core/
+    │       ├── __init__.py
+    │       ├── banner_grabber.py
+    │       ├── config.py
+    │       ├── config_factory.py
+    │       ├── config_loader.py
+    │       ├── cve.py
+    │       ├── cve_matcher.py
+    │       ├── cve_parser.py
+    │       ├── dns_resolver.py
+    │       ├── findings.py
+    │       ├── http_analyzer.py
+    │       ├── json_report_generator.py
+    │       ├── logger.py
+    │       ├── misconfig_detector.py
+    │       ├── nvd_client.py
+    │       ├── port_scanner.py
+    │       ├── report_generator.py
+    │       ├── risk_analyzer.py
+    │       ├── risk_summary.py
+    │       ├── service_fingerprint.py
+    │       ├── severity.py
+    │       ├── tls_analyzer.py
+    │       └── validator.py
+    └── tests/
+        ├── test_banner_grabber.py
+        ├── test_config.py
+        ├── test_cve.py
+        ├── test_cve_parser.py
+        ├── test_dns.py
+        ├── test_finding.py
+        ├── test_html_report.py
+        ├── test_http.py
+        ├── test_integration.py
+        ├── test_json_report.py
+        ├── test_matcher.py
+        ├── test_misconfig.py
+        ├── test_nvd.py
+        ├── test_port_scanner.py
+        ├── test_report_generator.py
+        ├── test_risk_analyzer.py
+        ├── test_risk_summary.py
+        ├── test_severity.py
+        ├── test_tls.py
+        └── test_validator.py
+
+## Technology Stack
+
+- Python 3.12
+- Requests
+- Socket Programming
+- SSL/TLS
+- ThreadPoolExecutor
+- JSON
+- HTML
+- Docker
+- Git
+- GitHub Actions
+- Python unittest
+
+## Requirements
+
+- Python 3.12 or later
+- Git
+- Internet connection for CVE lookup
+- Docker (optional)
+
+Install dependencies:
+
+    pip install -r requirements.txt
+
+## Configuration
+
+Scanner configuration is stored in:
+
+    config.json
+
+Configuration options include:
+
+- Start port
+- End port
+- Connection timeout
+- Maximum worker threads
 
 Example configuration:
 
     {
-        "scanner": {
-            "start_port": 80,
-            "end_port": 443,
-            "timeout": 2.0,
-            "max_workers": 20
-        }
+        "start_port": 80,
+        "end_port": 443,
+        "timeout": 2.0,
+        "max_workers": 20
     }
 
-Configuration options:
-
-| Option | Description |
-|--------|-------------|
-| start_port | First TCP port to scan |
-| end_port | Last TCP port to scan |
-| timeout | Socket connection timeout |
-| max_workers | Maximum concurrent workers |
-
-If config.json does not exist or contains invalid JSON, SentinelRecon automatically uses the default configuration.
-
-### 12. HTML Reports
-
-SentinelRecon generates timestamped HTML reports.
-
-Reports contain:
-
-- Target information
-- Open services
-- Security findings
-- Known vulnerabilities
-- Risk summary
-- Generation timestamp
-
-Reports are saved in:
-
-    reports/
-
-Example:
-
-    reports/google.com_20260808_175326.html
-
-### 13. JSON Reports
-
-SentinelRecon generates structured JSON vulnerability assessment reports.
-
-The JSON report contains:
-
-- Target
-- Generation timestamp
-- Services
-- Security findings
-- Known vulnerabilities
-- Risk summary
-
-Example:
-
-    {
-        "target": "example.com",
-        "generated_at": "2026-08-08T17:53:26",
-        "services": [
-            {
-                "port": 80,
-                "service": "HTTP",
-                "product": "Apache",
-                "version": "2.4.7"
-            }
-        ],
-        "security_findings": [],
-        "known_vulnerabilities": [],
-        "risk_summary": {
-            "critical": 0,
-            "high": 0,
-            "medium": 0,
-            "low": 0,
-            "informational": 0,
-            "total": 0,
-            "average_cvss": 0.0,
-            "overall_risk": "None"
-        }
-    }
-
-JSON reports are saved in:
-
-    reports/
-
-## Project Architecture
-
-The SentinelRecon scanning pipeline is:
-
-    User Input
-        |
-        v
-    Target Validation
-        |
-        v
-    DNS Resolution
-        |
-        v
-    TCP Port Scanning
-        |
-        v
-    Banner Grabbing
-        |
-        v
-    Service Fingerprinting
-        |
-        +-------------------+
-        |                   |
-        v                   v
-    HTTP Analysis       TLS Analysis
-        |                   |
-        v                   v
-    Security            Certificate
-    Findings            Analysis
-        |                   |
-        +---------+---------+
-                  |
-                  v
-             CVE Lookup
-                  |
-                  v
-             Risk Analysis
-                  |
-            +-----+-----+
-            |           |
-            v           v
-        HTML Report  JSON Report
-
-## Project Structure
-
-    netrecon/
-    |
-    ├── src/
-    │   ├── core/
-    │   │   ├── __init__.py
-    │   │   ├── banner_grabber.py
-    │   │   ├── config.py
-    │   │   ├── config_factory.py
-    │   │   ├── config_loader.py
-    │   │   ├── cve.py
-    │   │   ├── cve_matcher.py
-    │   │   ├── cve_parser.py
-    │   │   ├── dns_resolver.py
-    │   │   ├── findings.py
-    │   │   ├── http_analyzer.py
-    │   │   ├── json_report_generator.py
-    │   │   ├── logger.py
-    │   │   ├── misconfig_detector.py
-    │   │   ├── nvd_client.py
-    │   │   ├── port_scanner.py
-    │   │   ├── report_generator.py
-    │   │   ├── risk_analyzer.py
-    │   │   ├── risk_summary.py
-    │   │   ├── service_fingerprint.py
-    │   │   ├── severity.py
-    │   │   ├── tls_analyzer.py
-    │   │   └── validator.py
-    │   │
-    │   └── main.py
-    │
-    ├── tests/
-    │   ├── test_banner_grabber.py
-    │   ├── test_config.py
-    │   ├── test_cve.py
-    │   ├── test_cve_parser.py
-    │   ├── test_dns.py
-    │   ├── test_finding.py
-    │   ├── test_http.py
-    │   ├── test_json_report.py
-    │   ├── test_matcher.py
-    │   ├── test_misconfig.py
-    │   ├── test_nvd.py
-    │   ├── test_port_scanner.py
-    │   ├── test_report_generator.py
-    │   ├── test_risk_analyzer.py
-    │   ├── test_risk_summary.py
-    │   ├── test_severity.py
-    │   ├── test_tls.py
-    │   └── test_validator.py
-    │
-    ├── reports/
-    ├── config.json
-    ├── requirements.txt
-    └── README.md
-
-## Requirements
-
-- Python 3.10+
-- Linux, macOS, or Windows
-- Internet connection for NVD CVE lookups
-- Permission to scan the target system
-
-Python dependency:
-
-    requests
-
-Most scanner functionality uses Python's standard library.
-
-## Installation
+## Running SentinelRecon
 
 Clone the repository:
 
-    git clone <your-repository-url>
-    cd netrecon
+    git clone <YOUR_GITHUB_REPOSITORY_URL>
+    cd SentinelRecon
 
 Create a virtual environment:
 
     python3 -m venv .venv
 
-Activate the virtual environment on Linux/macOS:
+Activate it on Linux:
 
     source .venv/bin/activate
 
-Activate the virtual environment on Windows:
+Activate it on Windows:
 
     .venv\Scripts\activate
 
@@ -337,236 +233,292 @@ Install dependencies:
 
     pip install -r requirements.txt
 
-## Usage
+Run SentinelRecon:
 
-Run SentinelRecon with:
+    python src/main.py
 
-    PYTHONPATH=src python src/main.py
+The program will ask:
 
-The scanner will ask for a target:
+    Enter an IP address or domain:
 
-    Enter an IP address or domain: example.com
+Enter a target that you own or have explicit authorization to scan.
 
-The scanner performs:
+Example:
 
-1. Target validation
-2. DNS resolution
-3. TCP port scanning
-4. Banner grabbing
-5. Service fingerprinting
-6. HTTP analysis
-7. TLS analysis
-8. Security misconfiguration detection
-9. CVE lookup
-10. Risk analysis
-11. HTML report generation
-12. JSON report generation
+    example.com
 
-## Example Output
+## Example Scan
+
+Example execution:
 
     Enter an IP address or domain: example.com
+
+    Scanner Configuration
+    --------------------------------------------------
+    Start Port  : 80
+    End Port    : 443
+    Timeout     : 2.0
+    Max Workers : 20
 
     Resolving 'example.com'...
 
     Resolved Addresses:
 
-    - 93.184.216.34
+     - 104.20.23.154
+     - 172.66.147.243
 
-    Scanning TCP ports on 93.184.216.34...
+    Scanning TCP ports on 104.20.23.154...
     Please wait...
 
     Total Open Ports Found: 2
 
-    ## HTTP Analysis
+HTTP analysis may display:
 
-    Status Code : 200
-    Server      : ExampleServer
-    Content-Type: text/html
+    HTTP Analysis
+    --------------------------------------------------
+    Status Code : 403
+    Server      : cloudflare
+    Content-Type: text/plain; charset=UTF-8
 
-    ## TLS Analysis
+Security header analysis:
+
+    Strict-Transport-Security           ✗ Missing
+    Content-Security-Policy             ✗ Missing
+    X-Frame-Options                     ✓ Present
+    X-Content-Type-Options              ✗ Missing
+    Referrer-Policy                     ✓ Present
+    Permissions-Policy                  ✗ Missing
+
+TLS analysis includes:
 
     TLS Version        : TLSv1.3
-    Issuer             : Example CA
+    Issuer             : ...
     Subject            : example.com
     Certificate Status : Valid
+    Days Remaining     : ...
 
-    # Known Vulnerabilities
+The final risk summary contains:
 
-    No known vulnerabilities found.
+    Critical       : ...
+    High           : ...
+    Medium         : ...
+    Low            : ...
+    Informational  : ...
+    Total CVEs     : ...
+    Average CVSS   : ...
+    Overall Risk   : ...
 
-    # Risk Summary
+## Reports
 
-    Critical       : 0
-    High           : 0
-    Medium         : 0
-    Low            : 0
-    Informational  : 0
-    Total CVEs     : 0
-    Average CVSS   : 0.0
-    Overall Risk   : None
+SentinelRecon automatically creates a reports directory.
 
-    HTML Report Created:
-    reports/example.com_YYYYMMDD_HHMMSS.html
+Two reports are generated after a successful scan:
 
-    JSON Report Created:
-    reports/example.com_YYYYMMDD_HHMMSS.json
+    reports/
+    ├── target_timestamp.html
+    └── target_timestamp.json
 
-## Testing
+### HTML Report
 
-SentinelRecon uses Python's built-in unittest framework.
+The HTML report contains:
 
-Run the complete test suite with:
+- Target information
+- Open services
+- Security findings
+- Known vulnerabilities
+- Risk summary
 
-    PYTHONPATH=src python -m unittest discover -s tests -v
+### JSON Report
 
-Current test result:
+The JSON report provides machine-readable information including:
 
-    ----------------------------------------------------------------------
-    Ran 46 tests in 0.055s
+- Target
+- Scan timestamp
+- Services
+- Security findings
+- CVEs
+- Risk summary
 
-    OK
+## Running Tests
 
-All 46 automated tests currently pass successfully.
+Run the complete test suite:
 
-### Integration Testing
+    python -m unittest discover -s tests -p "test_*.py" -v
 
-SentinelRecon includes integration tests that verify multiple components working together.
-
-The integration test suite currently covers:
-
-- Target validation → DNS resolution → port scanning
-- Port scanning → banner grabbing → service fingerprinting
-- HTTP analysis → security misconfiguration detection
-- CVE lookup → risk analysis
-- TLS certificate analysis
-- Risk analysis → JSON report generation
-
-Integration tests are located in:
-
-    tests/test_integration.py
-
-Current result:
-
-    Ran 6 tests
-    OK
-
-Combined unit and integration test suite:
+Expected result:
 
     Ran 52 tests
     OK
 
-### Tested Components
+The test suite contains both unit and integration tests.
 
-The test suite covers:
+Integration tests verify flows such as:
 
-- Target validation
-- IPv4 validation
-- IPv6 validation
-- Domain validation
-- DNS resolution
-- TCP port scanning
-- Banner grabbing
-- Service fingerprinting
-- HTTP analysis
-- HTTP security headers
-- TLS analysis
-- Security misconfiguration detection
-- CVE model
-- CVE parsing
-- CVE matching
-- NVD API client
-- Severity classification
-- Risk analysis
-- Risk summary
-- Configuration loading
-- Configuration factory
-- HTML report generation
-- JSON report generation
+    Target Validation
+           ↓
+    DNS Resolution
+           ↓
+    Port Scanning
 
-### Test Structure
+    Port Scanning
+           ↓
+    Banner Grabbing
+           ↓
+    Service Fingerprinting
 
-All tests are located inside:
+    HTTP Analysis
+           ↓
+    Security Header Detection
+           ↓
+    Misconfiguration Detection
 
-    tests/
+    CVE Lookup
+           ↓
+    CVE Parsing
+           ↓
+    Risk Analysis
 
-The project currently contains 46 automated tests.
+    Risk Analysis
+           ↓
+    JSON Report Generation
 
-Network-dependent functionality is tested using mocks so that the test suite does not require real connections to external systems.
+## Docker
 
-## Development Milestones
+Build the Docker image:
 
-- [x] Milestone 1 — Project Setup
-- [x] Milestone 2 — Logging
-- [x] Milestone 3 — Target Validation
-- [x] Milestone 4 — DNS Resolution
-- [x] Milestone 5 — TCP Port Scanner
-- [x] Milestone 6 — Banner Grabbing
-- [x] Milestone 7 — Service Fingerprinting
-- [x] Milestone 8 — Concurrent Scanning
-- [x] Milestone 9 — HTTP/HTTPS Analysis
-- [x] Milestone 10 — TLS Certificate Inspection
-- [x] Milestone 11 — Misconfiguration Detection
-- [x] Milestone 12 — CVE Lookup
-- [x] Milestone 13 — CVSS / Risk Analysis
-- [x] Milestone 14 — HTML Report Generation
-- [x] Milestone 15 — JSON Export
-- [x] Milestone 16 — Configuration File Support
-- [x] Milestone 17 — Unit Tests
-- [x] Milestone 18 — Integration Tests
+    docker build -t sentinelrecon .
 
-## Technologies Used
+Run the container:
 
-- Python
-- Socket Programming
-- ThreadPoolExecutor
-- HTTP
-- TLS/SSL
-- DNS
-- NIST NVD API
-- CVE
-- CVSS
-- JSON
-- HTML
-- unittest
-- unittest.mock
-- Git
-- GitHub
+    docker run --rm -it --user "$(id -u):$(id -g)" sentinelrecon
 
-## Security Considerations
+The --user option runs the container using the current host user's UID and GID. This prevents generated reports and logs from being owned by root.
 
-SentinelRecon performs active network connections against targets.
+## GitHub Actions
 
-Only scan:
+The project uses GitHub Actions for continuous integration.
 
+Workflow file:
+
+    .github/workflows/ci.yml
+
+The CI pipeline:
+
+1. Checks out the repository
+2. Sets up Python 3.12
+3. Installs project dependencies
+4. Runs all tests
+
+The workflow runs when changes are pushed to main or when a pull request targets main.
+
+## Architecture
+
+SentinelRecon follows a modular architecture:
+
+    User Input
+        │
+        ▼
+    Target Validation
+        │
+        ▼
+    DNS Resolution
+        │
+        ▼
+    TCP Port Scanner
+        │
+        ▼
+    Banner Grabbing
+        │
+        ▼
+    Service Fingerprinting
+        │
+        ├───────────────┐
+        ▼               ▼
+    HTTP Analysis     TLS Analysis
+        │
+        ▼
+    Misconfiguration Detection
+        │
+        ▼
+    CVE Lookup
+        │
+        ▼
+    Risk Analysis
+        │
+        ├───────────────┐
+        ▼               ▼
+    HTML Report      JSON Report
+
+Core functionality is separated into individual modules under:
+
+    src/core/
+
+This makes the project easier to maintain, test, and extend.
+
+## Security & Ethical Use
+
+SentinelRecon is intended for:
+
+- Educational purposes
+- Security research
+- Development environments
 - Systems you own
-- Lab environments
-- CTF environments
-- Systems where you have explicit authorization
+- Systems where you have explicit authorization to perform security testing
 
-Do not use SentinelRecon to scan unauthorized systems or networks.
+Do not use SentinelRecon to scan systems or networks without permission.
+
+The user is responsible for ensuring that all scanning activities comply with applicable laws, policies, and authorization requirements.
+
+## Project Status
+
+SentinelRecon has completed its planned development milestones.
+
+    Project Setup                 ✅
+    Logging                       ✅
+    Target Validation             ✅
+    DNS Resolution                ✅
+    TCP Port Scanner              ✅
+    Banner Grabbing               ✅
+    Service Fingerprinting        ✅
+    Concurrent Scanning           ✅
+    HTTP/HTTPS Analysis           ✅
+    TLS Certificate Analysis      ✅
+    Misconfiguration Detection    ✅
+    CVE Lookup                    ✅
+    CVSS/Risk Analysis            ✅
+    HTML Report Generation        ✅
+    JSON Export                   ✅
+    Configuration Support         ✅
+    Unit Testing                  ✅
+    Integration Testing           ✅
+    Docker Support                ✅
+    GitHub Actions CI             ✅
+    Final Refactoring             ✅
+    Final Documentation           ✅
 
 ## Future Improvements
 
-Potential future enhancements include:
+Possible future improvements include:
 
-- More service fingerprints
-- Additional HTTP security checks
+- Additional service fingerprinting
+- Expanded security checks
+- Improved IPv6 scanning
 - More comprehensive TLS analysis
+- Additional report formats
 - Improved CVE matching
-- CVSS v3/v4 support
-- CLI argument support
-- Better logging
-- Integration tests
-- Docker support
-- GitHub Actions CI/CD
-- Improved error handling
-- Performance optimization
-- Additional report visualizations
+- Configurable scan profiles
+- More advanced vulnerability correlation
+- Improved CLI interface
+- Additional automated security checks
 
-## Disclaimer
+## License
 
-SentinelRecon is an educational security assessment project.
+This project is licensed under the MIT License.
 
-The author is not responsible for misuse of this software.
+See the LICENSE file for details.
 
-Always obtain proper authorization before performing security scans against a target.
+## Author
+
+Developed as a cybersecurity and network reconnaissance project using Python.
+
+SentinelRecon — Network Reconnaissance & Vulnerability Assessment Tool
